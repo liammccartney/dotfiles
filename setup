@@ -1,0 +1,14 @@
+#! /bin/bash
+
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+brew install bash-completion
+brew install git
+brew install bash-git-prompt
+brew install node
+brew install python@2
+brew install postgres
+brew install direnv
+brew install vim
+brew install hub
+brew install tmux

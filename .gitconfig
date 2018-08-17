@@ -1,0 +1,68 @@
+[core]
+  # Excludesfiles allows us to set a global list of things to ignore
+	excludesfile = ~/.gitignore_global
+	editor = vim
+
+# These are custom color options for the console
+[color]
+    ui = auto
+
+[color "status"]
+  untracked = cyan
+  changed = green
+  added = yellow
+
+# Aliases are command shortcuts
+[alias]
+  co = checkout
+
+  # lg is now a shortcut for a pretty log with short commit messages
+  # See the log manpage: https://www.kernel.org/pub/software/scm/git/docs/git-log.html
+  # for explanations of what these options do
+  lg = log \
+    --graph \
+    --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' \
+    --abbrev-commit \
+    --date=relative
+
+  # Shorthand for commit, also enforces diff display in editor before commit
+  ci = commit --verbose
+
+  # Shorthand for a less noisy status
+  s = commit --dry-run --short
+
+  # More sensible names for adding and removing files from the readme
+  stage = add
+  unstage = reset HEAD
+
+  # Edit the last commit
+  amend= commit --verbose --amend
+  # Fancy logging. From garybernhardt
+  #   h = head
+  #   hp = head with patch
+  #   r = recent commits, only current branch
+  #   ra = recent commits, all reachable refs
+  #   l = all commits, only current branch
+  #   la = all commits, all reachable refs
+  head = !git r -1
+  h = !git head
+  hp = "!. ~/.githelpers && show_git_head"
+  r = !GIT_NO_PAGER=1 git l -30
+  ra = !git r --all
+  l = "!. ~/.githelpers && pretty_git_log"
+  la = !git l --all
+
+  cleanup = "!. ~/.githelpers && cleanup_branches"
+  cu = !git cleanup
+
+  current-branch = rev-parse --abbrev-ref HEAD
+  cb = !git current-branch
+
+  push-this = "!. ~/.githelpers && push_this"
+[user]
+	name = Liam McCartney
+	email = liam.mccartney@gmail.com
+[push]
+	default = simple
+[diff]
+	tool = vimdiff

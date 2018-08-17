@@ -1,0 +1,33 @@
+#!/usr/bin/env python
+"""
+
+    Open Automation PRs
+    ===================
+    Prints a list of open PRs for the Automation Team
+
+"""
+from os import environ
+
+from github import Github
+
+ORG_NAME = 'successacademycharterschools'
+TEAM_ID = 2508540
+
+def main():
+    """ Prints out Automation Team repos that have open PRs,
+         and the links to them
+    """
+    gh = Github(environ['GITHUB_TOKEN'])
+    org = gh.get_organization(ORG_NAME)
+    team = org.get_team(TEAM_ID)
+
+    for repo in team.get_repos():
+        prs = list(repo.get_pulls())
+        if prs:
+            print "%s:" % repo.name
+            for pr in prs:
+                print "\t[%s]\n\t\t%s - %s" % (pr.title, pr.html_url, pr.user.login)
+    return gh, team.get_repos()
+
+if __name__ == '__main__':
+    main()
