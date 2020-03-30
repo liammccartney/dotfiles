@@ -19,7 +19,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'majutsushi/tagbar'
   Plug 'ludovicchabant/vim-gutentags'
   Plug 'preservim/nerdtree'
-  Plug 'ack.vim'
+  Plug 'mileszs/ack.vim'
 call plug#end()
 
 """""""""""""""""""""""""""""
