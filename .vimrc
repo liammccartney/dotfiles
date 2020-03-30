@@ -5,15 +5,21 @@ autocmd!
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Load ALL the Plugins
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+endif
+
 call plug#begin('~/.vim/plugged')
-Plug 'altercation/vim-colors-solarized'
-Plug 'dense-analysis/ale'
-Plug 'tpope/vim-commentary'
-Plug 'kien/ctrlp.vim'
-Plug 'tmhedberg/matchit'
-Plug 'majutsushi/tagbar'
-Plug 'ludovicchabant/vim-gutentags'
-Plug 'preservim/nerdtree'
+  Plug 'altercation/vim-colors-solarized'
+  Plug 'dense-analysis/ale'
+  Plug 'tpope/vim-commentary'
+  Plug 'kien/ctrlp.vim'
+  Plug 'tmhedberg/matchit'
+  Plug 'majutsushi/tagbar'
+  Plug 'ludovicchabant/vim-gutentags'
+  Plug 'preservim/nerdtree'
+  Plug 'ack.vim'
 call plug#end()
 
 """""""""""""""""""""""""""""
