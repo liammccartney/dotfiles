@@ -123,13 +123,6 @@ let g:omni_sql_no_default_maps = 1
 " Show side-by-side diffs, not above/below
 set diffopt=vertical
 
-" True color mode! (Requires a fancy modern terminal, but iTerm works.)
-if exists('+termguicolors')
-  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-  set termguicolors
-endif
-
 " Write swap files to disk & trigger CursorHold event faster (default is
 " after 4000 ms of inactivity)
 set updatetime=200
