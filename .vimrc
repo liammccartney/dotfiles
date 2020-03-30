@@ -191,6 +191,7 @@ let g:ale_linters = {
 let g:ale_fixers = {
       \'python': ['black'],
       \'typescript': ['prettier'],
+      \'typescriptreact': ['prettier'],
       \}
 let g:ale_php_phpcs_standard = "CakePHP"
 let g:ale_php_phpcs_options = "--exclude=Generic.Commenting.Todo,Generic.Files.LineLength,PSR2.ControlStructures.ControlStructureSpacing,CakePHP.Strings.ConcatenationSpacing,PSR1.Files.SideEffects"
