@@ -11,52 +11,25 @@ import os
 import subprocess
 from sys import argv
 
-import boto3
-
-CF = boto3.resource('cloudformation')
-
-JSON_PATH = '.serverless/serverless-state.json'
-
-
-def get_physical_id(stack_name, resource_ref):
-    """ Returns a physical id """
-
-    logical_id = resource_ref.get('Ref')
-
-    return CF.StackResource(stack_name, logical_id).physical_resource_id
-
-def package_service(stage):
+def main(stage):
+    # Severless just did the work of retrieving necessary env vars from SSM
+    # So we open up the package as JSON and load the vars into the shell
     proc = subprocess.Popen('serverless package -s %s' % stage, shell=True)
+
     proc.wait()
 
-
-def load_package():
     with open('.serverless/serverless-state.json') as sls_state_file:
-        return json.loads(sls_state_file.read())
+        sls_state = json.loads(sls_state_file.read())
 
-def main(stage):
-    if not os.path.exists(JSON_PATH):
-        package_service(stage)
+        env = sls_state['service']['provider']['environment']
 
-    sls_state = load_package()
-
-    if sls_state['service']['provider']['stage'] != stage:
-        package_service(stage)
-        sls_state = load_package()
-
-    stack_name = '%s-%s' % (sls_state['service']['service'], stage)
-
-    env = sls_state['service']['provider']['environment']
-
-    with open('.envrc', 'w') as f:
-        for name, value in env.iteritems():
-            if isinstance(value, dict):
-                print value
-                value = get_physical_id(stack_name, value)
-            f.write('export %s=%s\n' % (name, value))
+        with open('.envrc', 'w') as f:
+            for name, value in env.iteritems():
+                f.write('export %s=%s\n' % (name, value))
 
     proc = subprocess.Popen('direnv allow .', shell=True)
     exit(proc.wait())
 
 if __name__ == '__main__':
     main(argv[1])
+

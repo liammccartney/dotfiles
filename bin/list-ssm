@@ -6,44 +6,23 @@
     CLI to help list SSM Params
 
 """
-from sys import argv
-from argparse import ArgumentParser
 import boto3
 
 
-def parse_args():
-    """ Parse the args """
-    parser = ArgumentParser()
-    parser.add_argument('--filter', '-f', dest='filter',
-                        action='store', nargs='+')
-
-    return parser.parse_args()
-
-
-def main(param_filter):
+def main():
     """ Add SSM Params """
     ssm = boto3.client('ssm')
-    opts = {}
-    if param_filter:
-        opts['ParameterFilters'] = [
-            {
-                'Key': 'Name',
-                'Option': 'BeginsWith',
-                'Values': param_filter
-            }
-        ]
-    for page in ssm.get_paginator('describe_parameters').paginate(**opts):
+    for page in ssm.get_paginator('describe_parameters').paginate():
         for param in page['Parameters']:
             name = param['Name']
             res = ssm.get_parameter(Name=name, WithDecryption=True)
             val = res['Parameter']['Value']
             print '{} | {}'.format(name, val)
 
-
 if __name__ == '__main__':
-    args = parse_args()
     try:
-        main(args.filter)
+        main()
     except KeyboardInterrupt:
         print '\nCancelling...'
         exit(0)
+

@@ -25,7 +25,6 @@ CONNECTION_STR = 'postgresql://{user}:{password}@{host}/{db_name}'
 
 SSM = boto3.client('ssm')
 
-
 def main(domain, stage):
     """ Add SSM Params """
     db_name = get_param(DB_NAME.format(stage=stage))
@@ -39,6 +38,7 @@ def main(domain, stage):
         password = get_param(PASSWORD.format(stage=stage))
         user = get_param(USER.format(stage=stage))
 
+
     conn = CONNECTION_STR.format(user=user, password=password,
                                  host=host, db_name=db_name)
 
@@ -48,7 +48,6 @@ def main(domain, stage):
 def get_param(name):
     res = SSM.get_parameter(Name=name, WithDecryption=True)
     return res['Parameter']['Value']
-
 
 def _cleanse_val(val):
     """ Strips trailing/leading whitespace """
@@ -69,7 +68,6 @@ def valid_domains(stage):
                 domains.add(match.groups()[0])
     return domains
 
-
 PARSER = argparse.ArgumentParser()
 PARSER.add_argument('--stage', '-s', help='stage of lambda environment',
                     required=True, choices=['dev', 'stage', 'prod'])
@@ -83,3 +81,4 @@ PARSER.add_argument('--domain', '-d', help='Domain to login as',
 if __name__ == '__main__':
     ARGS = PARSER.parse_args()
     main(domain=ARGS.domain, stage=ARGS.stage)
+

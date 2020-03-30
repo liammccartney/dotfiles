@@ -1,0 +1,6 @@
+#! /bin/bash
+
+git co feature/liams-containers -- docker-compose.yml
+docker-compose up -d
+git reset docker-compose.yml
+git co -- docker-compose.yml
