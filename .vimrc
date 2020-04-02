@@ -12,6 +12,8 @@ endif
 
 call plug#begin('~/.vim/plugged')
   Plug 'altercation/vim-colors-solarized'
+  Plug 'itchyny/lightline.vim'
+  Plug 'tpope/vim-fugitive'
   Plug 'dense-analysis/ale'
   Plug 'tpope/vim-commentary'
   Plug 'kien/ctrlp.vim'
@@ -171,6 +173,20 @@ colorscheme solarized
 set cursorline
 hi clear CursorLine
 hi CursorLine cterm=underline gui=underline
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Lightline Config
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:lightline = {
+      \ 'colorscheme': 'solarized',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'FugitiveHead'
+      \ },
+      \ }
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Ale Config
