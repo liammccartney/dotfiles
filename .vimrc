@@ -152,6 +152,7 @@ augroup vimrcEx
   
   " Python should have 4 spaces of indentation
   autocmd FileType python set sw=4 sts=4 et
+  autocmd FileType javascript set sw=4 sts=4 et
 
   " Leave the reaturn key alone when in command line windows, since it's used
   " to run commands there
