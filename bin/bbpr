@@ -1,0 +1,169 @@
+#!/usr/bin/env ruby -W0
+# Need to set env variables for bitbucket and jira credentials: BITBUCKET_USER, BITBUCKET_PASS, JIRA_USER
+
+
+require 'httparty'
+require 'jira-ruby'
+require 'yaml'
+
+conf = YAML.load_file('/Users/liam/.bbpr.yml')
+
+commit = `git rev-parse --short=12 HEAD`.strip
+
+repo = `git rev-parse --show-toplevel`.split('/').last.chomp
+
+res = HTTParty.get("https://api.bitbucket.org/2.0/repositories/coursehorse/#{repo}/pullrequests",
+    basic_auth: { username: conf['bitbucket']['user'], password: conf['bitbucket']['password'] },
+    headers: { "Content-Type" => "application/json" }
+)
+
+open_pr = nil
+prs = res.parsed_response['values']
+
+prs.each do |pr|
+    if pr['source']['commit']['hash'] == commit
+        puts "We found a PR opened for this branch!"
+        puts pr['title']
+        open_pr = pr
+    end
+end
+
+if open_pr
+    source = open_pr['source']['branch']['name']
+    destination = open_pr['destination']['branch']['name']
+    puts "Merge #{source} into #{destination} now? (y/n)"
+    should_merge = STDIN.gets
+
+    if should_merge.strip.downcase == 'y'
+        res = HTTParty.post(open_pr['links']['merge']['href'],
+            body: {}.to_json,
+            basic_auth: { username: conf['bitbucket']['user'], password: conf['bitbucket']['password'] },
+            headers: { "Content-Type" => "application/json" }
+        )
+
+        if res.parsed_response['state'] == 'MERGED'
+            puts 'Merge succeeded! Here is the commit:'
+            `git fetch`
+            puts `git show #{res.parsed_response['merge_commit']['hash']}`
+        else
+            raise "OH NOEZ #{res.inspect}"
+        end
+    else
+        puts '┬──┬ ノ( ゜-゜ノ)'
+    end
+
+    exit
+end
+
+
+# get into about a PR
+# res = HTTParty.get('https://api.bitbucket.org/2.0/repositories/coursehorse/coursehorse-web/pullrequests/1076',
+#   basic_auth: { username: ENV['BITBUCKET_USER'], password: ENV['BITBUCKET_PASS'] },
+#   headers: {
+#   "Content-Type" => "application/json"
+#   })
+#
+# $ curl -X POST -H "Content-Type: application/json" -u s3m3n:bbpassword https://bitbucket.org/api/2.0/repositories/s3m3n/reponame/pullrequests -d '{ "title": "Merge some branches", "description": "stackoverflow example", "source": { "branch": { "name": "choose branch to merge with" }, "repository": { "full_name": "s3m3n/reponame" } }, "destination": { "branch": { "name": "choose branch that is getting changes" } }, "reviewers": [ { "username": "some other user needed to review changes" } ], "close_source_branch": false }'
+source = `git rev-parse --abbrev-ref HEAD`.strip
+# Default to integration if no destination specified
+destination = (ARGV[0] || 'integration').strip
+
+puts "Create BB PR for #{source} into #{destination}? (y/n)"
+should_create = STDIN.gets
+
+if should_create.strip.downcase == 'y'
+    puts "Title? #{source}:"
+    title = STDIN.gets.chomp
+    title = "#{source}: #{title}"
+    puts "Description?"
+    description = STDIN.gets.chomp
+
+    body = {
+        source: { branch: { name: source } },
+        title: title || `git log -1 --pretty=%B`.strip,
+        destination: { branch: { name: destination } },
+        description: description || 'This ish was auto generated'
+    }
+
+    if destination != 'master'
+        puts "Add reviewers? (y/n)"
+        if STDIN.gets.chomp.downcase == 'y'
+            body[:reviewers] = [
+                { username: 'mrmorris' },
+                { username: 'notbaxter' }
+            ]
+        end
+    else
+        puts "Destination is master, no reviewers required"
+    end
+
+    res = HTTParty.post("https://api.bitbucket.org/2.0/repositories/coursehorse/#{repo}/pullrequests",
+        body: body.to_json,
+        basic_auth: { username: conf["bitbucket"]["user"], password: conf["bitbucket"]["password"]},
+        headers: { "Content-Type" => "application/json" }
+    )
+
+    raise "Request failed or status is bad: #{res.inspect}" unless res.parsed_response && res.parsed_response['state'] == 'OPEN'
+
+    pr_id = res.parsed_response['id']
+
+    puts "BB PR created at https://bitbucket.org/coursehorse/#{repo}/pull-requests/#{pr_id}"
+end
+
+
+options = {
+    :username => conf["jira"]["user"],
+    :password => conf["jira"]["password"],
+    :site     => 'https://coursehorse.atlassian.net',
+    :context_path => '',
+    :auth_type => :basic,
+    :read_timeout => 120,
+    # :http_debug => true
+}
+
+client = JIRA::Client.new(options)
+
+issue = (source =~ /CH-\d+/i ? client.Issue.find(source) : nil) rescue nil
+
+if destination != 'master' && issue
+    puts "Transitioning ticket #{source} to Needs Code Review?"
+    # Accept 351 / 501
+    # Ready for Development 561
+    # Begin 11 / 511
+    # Complete 681 / 21
+    loop do
+        available_transitions = issue.transitions.all
+        next_transition_id = available_transitions.map(&:id).select do |id|
+            [351, 501, 561, 11, 511, 681, 21].include?(id.to_i)
+        end.first
+        break unless next_transition_id
+
+        updated_fields = {}
+        # Check story points
+        unless issue.fields['customfield_10004']
+            puts "Enter a points number"
+            story_points = STDIN.gets.to_i
+            raise "Points must be number > 0" unless story_points > 0
+            updated_fields["customfield_10004"] = story_points
+        end
+
+        # Check QA notes
+        unless issue.fields['customfield_10800']
+            puts "Enter QA notes"
+            qa_notes = STDIN.gets || "n/a"
+            updated_fields["customfield_10800"] = qa_notes
+        end
+
+        issue.save({"fields" => updated_fields}) if updated_fields.count > 0
+
+        puts "Executing transition #{next_transition_id}"
+        issue_transition = issue.transitions.build
+        issue_transition.save!('transition' => {'id' => next_transition_id})
+    end
+
+    # reviewer = ['@baxter@coursehorse.com', 'Ryan'].sample
+    # puts "Assigning to #{reviewer}"
+    # issue.save({'fields' => {'assignee' => {'name' => reviewer}}})
+
+    # issue.save()
+end

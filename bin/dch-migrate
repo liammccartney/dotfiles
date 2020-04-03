@@ -1,3 +1,11 @@
 #! /bin/bash
+
+if [ -z $1 ]
+then
+    echo "Provide a direction: install || rollback"
+    exit 1
+fi
+
 direction=$1
+
 docker exec -it coursehorse-web sh -c "php ./scripts/cron-jobs.php migrations --type=$direction --db=local --withSeed=1"
