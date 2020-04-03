@@ -22,6 +22,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'ludovicchabant/vim-gutentags'
   Plug 'preservim/nerdtree'
   Plug 'mileszs/ack.vim'
+  Plug 'elixir-editors/vim-elixir'
 call plug#end()
 
 """""""""""""""""""""""""""""
