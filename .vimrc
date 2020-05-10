@@ -12,6 +12,7 @@ endif
 
 call plug#begin('~/.vim/plugged')
   Plug 'altercation/vim-colors-solarized'
+  Plug 'leafgarland/typescript-vim'
   Plug 'itchyny/lightline.vim'
   Plug 'tpope/vim-fugitive'
   Plug 'dense-analysis/ale'
@@ -23,6 +24,10 @@ call plug#begin('~/.vim/plugged')
   Plug 'preservim/nerdtree'
   Plug 'mileszs/ack.vim'
   Plug 'elixir-editors/vim-elixir'
+  Plug 'MaxMEllon/vim-jsx-pretty'
+  Plug 'cespare/vim-toml'
+  Plug 'ElmCast/elm-vim'
+  Plug 'tpope/vim-abolish'
 call plug#end()
 
 """""""""""""""""""""""""""""
@@ -39,6 +44,7 @@ set tabstop=2
 set shiftwidth=2
 set softtabstop=2
 set autoindent
+set smartindent
 " Always display the status bar. We're not animals.
 set laststatus=2
 " On bracket insert briefly jump to the matching 
@@ -77,13 +83,17 @@ set showcmd
 syntax on
 " Enable file type detection
 " Load plugins, indentation files
-filetype plugin indent on
+filetype on
+filetype plugin on
+filetype indent on
 " Completion mode defailts to longest match, lists all matches
 set wildmode=longest,list
 set wildmenu
 
 " Show Line Numnbers
 set number
+
+set cc=79
 
 let mapleader=","
 
@@ -152,12 +162,20 @@ augroup vimrcEx
   
   " Python should have 4 spaces of indentation
   autocmd FileType python set sw=4 sts=4 et
+  autocmd FileType php set sw=4 sts=4 et
+  autocmd FileType html set sw=4 sts=4 et
   autocmd FileType javascript set sw=4 sts=4 et
+  autocmd FileType typescript set sw=4 sts=4 et
+  autocmd FileType typescript.tsx set sw=4 sts=4 et
+  autocmd FileType typescriptreact set sw=4 sts=4 et
+
+  " autocmd BufReadPost public/modules/*/js/*.js :ALEDisable<cr>
 
   " Leave the reaturn key alone when in command line windows, since it's used
   " to run commands there
   autocmd! CmdwinEnter * :unmap <cr>
   autocmd! CmdwinLeave * :call MapCR()
+	autocmd BufReadPost quickfix nnoremap <buffer> <CR> <CR>
 
   " Compute syntax highlighting from beginning of file. (By default, vim only
   " looks 200 lines back, which can make it highlight code incorrectly in some
@@ -199,20 +217,27 @@ let g:ale_lint_delay = 0
 let g:ale_set_quickfix = 0
 let g:ale_set_loclist = 0
 let g:ale_fix_on_save = 1
+highlight ALEWarning ctermbg=DarkMagenta
 
 let g:ale_linters = {
       \ 'javascript': ['eslint'],
       \ 'typescript': ['tslint', 'tsserver'],
+      \ 'typescriptreact': ['tslint', 'tsserver'],
       \ 'php': ['php', 'phpcs'],
       \ 'python': ['pylint'],
       \}
+" Disabled Fixers
+" \'python': ['black'],
+" \'javascript': ['prettier'],
 let g:ale_fixers = {
-      \'python': ['black'],
       \'typescript': ['prettier'],
       \'typescriptreact': ['prettier'],
+      \'json': ['prettier'],
       \}
 let g:ale_php_phpcs_standard = "CakePHP"
 let g:ale_php_phpcs_options = "--exclude=Generic.Commenting.Todo,Generic.Files.LineLength,PSR2.ControlStructures.ControlStructureSpacing,CakePHP.Strings.ConcatenationSpacing,PSR1.Files.SideEffects"
+
+let g:ale_python_black_options = "--skip-string-normalization"
 nnoremap <leader>a :ALENextWrap<cr>
 nnoremap <leader>A :ALEPreviousWrap<cr>
 nnoremap <leader>kA :ALEStopAllLSPs<cr>

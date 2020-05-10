@@ -2,6 +2,8 @@
   # Excludesfiles allows us to set a global list of things to ignore
 	excludesfile = ~/.gitignore_global
 	editor = vim
+  # pager = less -F -X
+  pager = delta --dark --theme='Solarized (dark)'
 
 # These are custom color options for the console
 [color]
