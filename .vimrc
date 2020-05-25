@@ -11,8 +11,7 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.vim/plugged')
-  Plug 'altercation/vim-colors-solarized'
-  Plug 'leafgarland/typescript-vim'
+  Plug 'haishanh/night-owl.vim'
   Plug 'itchyny/lightline.vim'
   Plug 'tpope/vim-fugitive'
   Plug 'dense-analysis/ale'
@@ -24,10 +23,13 @@ call plug#begin('~/.vim/plugged')
   Plug 'preservim/nerdtree'
   Plug 'mileszs/ack.vim'
   Plug 'elixir-editors/vim-elixir'
-  Plug 'MaxMEllon/vim-jsx-pretty'
   Plug 'cespare/vim-toml'
   Plug 'ElmCast/elm-vim'
   Plug 'tpope/vim-abolish'
+  Plug 'pangloss/vim-javascript'
+  Plug 'jelera/vim-javascript-syntax'
+  Plug 'leafgarland/typescript-vim'
+  Plug 'peitalin/vim-jsx-typescript'
 call plug#end()
 
 """""""""""""""""""""""""""""
@@ -188,17 +190,25 @@ augroup END
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set t_Co=256 " 256 colors
 set background=dark
-colorscheme solarized
+" colorscheme solarized
+colorscheme night-owl
+
 " Highlight current line.
 set cursorline
 hi clear CursorLine
 hi CursorLine cterm=underline gui=underline
+if (has("termguicolors"))
+  let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+endif
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Lightline Config
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:lightline = {
-      \ 'colorscheme': 'solarized',
+      \ 'colorscheme': 'nightowl',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
@@ -217,25 +227,28 @@ let g:ale_lint_delay = 0
 let g:ale_set_quickfix = 0
 let g:ale_set_loclist = 0
 let g:ale_fix_on_save = 1
-highlight ALEWarning ctermbg=DarkMagenta
+highlight ALEWarning ctermbg=Red
 
 let g:ale_linters = {
       \ 'javascript': ['eslint'],
-      \ 'typescript': ['tslint', 'tsserver'],
-      \ 'typescriptreact': ['tslint', 'tsserver'],
+      \ 'typescript': ['eslint', 'tsserver'],
+      \ 'typescriptreact': ['eslint', 'tsserver'],
+      \ 'typescript.tsx': ['eslint', 'tsserver'],
       \ 'php': ['php', 'phpcs'],
       \ 'python': ['pylint'],
       \}
 " Disabled Fixers
-" \'python': ['black'],
-" \'javascript': ['prettier'],
+            "\'javascript': ['prettier'],
 let g:ale_fixers = {
-      \'typescript': ['prettier'],
-      \'typescriptreact': ['prettier'],
-      \'json': ['prettier'],
-      \}
-let g:ale_php_phpcs_standard = "CakePHP"
-let g:ale_php_phpcs_options = "--exclude=Generic.Commenting.Todo,Generic.Files.LineLength,PSR2.ControlStructures.ControlStructureSpacing,CakePHP.Strings.ConcatenationSpacing,PSR1.Files.SideEffects"
+            \'elixir': ['mix_format'],
+            \'python': ['black'],
+            \'typescript': ['prettier'],
+            \'typescriptreact': ['prettier'],
+            \'json': ['prettier'],
+            \}
+let g:ale_php_phpcs_standard = "PSR12"
+let g:ale_php_phpcs_options = "--exclude=Squiz.Functions.MultiLineFunctionDeclaration"
+" let g:ale_php_phpcs_options = "--exclude=Generic.Commenting.Todo,Generic.Files.LineLength,PSR2.ControlStructures.ControlStructureSpacing,CakePHP.Strings.ConcatenationSpacing,PSR1.Files.SideEffects"
 
 let g:ale_python_black_options = "--skip-string-normalization"
 nnoremap <leader>a :ALENextWrap<cr>
@@ -440,7 +453,7 @@ let g:ctrlp_map = '<c-f>'
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/]\.(git|hg|svn)|node_modules|vendor|elm-stuff|plugins|tmp|_build|deps|katielovell\/public$',
-  \ 'file': '\v\.(exe|so|dll|DS_Store)$',
+  \ 'file': '\v\.(exe|so|dll|DS_Store|beam)$',
   \ 'link': '',
   \ }
 
@@ -455,7 +468,7 @@ fun! CleanExtraSpaces()
     call setreg('/', old_query)
 endfun
 
-autocmd BufWritePre *.php,*.phtml,*.ctp,*.txt,*.js,*.py,*.wiki,*.sh,*.coffee,*.rkt,*.ex,*.exs,*.rb :call CleanExtraSpaces()
+autocmd BufWritePre *.php,*.phtml,*.ctp,*.txt,*.js,*.py,*.wiki,*.sh,*.coffee,*.rkt,*.ex,*.exs,*.rb,*.erl :call CleanExtraSpaces()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PHP CS Config
