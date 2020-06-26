@@ -12,6 +12,8 @@ endif
 
 call plug#begin('~/.vim/plugged')
   Plug 'haishanh/night-owl.vim'
+  Plug 'rakr/vim-one'
+  Plug 'altercation/vim-colors-solarized'
   Plug 'itchyny/lightline.vim'
   Plug 'tpope/vim-fugitive'
   Plug 'dense-analysis/ale'
@@ -30,6 +32,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'jelera/vim-javascript-syntax'
   Plug 'leafgarland/typescript-vim'
   Plug 'peitalin/vim-jsx-typescript'
+  Plug 'MaxMEllon/vim-jsx-pretty'
 call plug#end()
 
 """""""""""""""""""""""""""""
@@ -91,6 +94,9 @@ filetype indent on
 " Completion mode defailts to longest match, lists all matches
 set wildmode=longest,list
 set wildmenu
+
+set list
+set listchars=tab:>-
 
 " Show Line Numnbers
 set number
@@ -167,9 +173,9 @@ augroup vimrcEx
   autocmd FileType php set sw=4 sts=4 et
   autocmd FileType html set sw=4 sts=4 et
   autocmd FileType javascript set sw=4 sts=4 et
-  autocmd FileType typescript set sw=4 sts=4 et
-  autocmd FileType typescript.tsx set sw=4 sts=4 et
-  autocmd FileType typescriptreact set sw=4 sts=4 et
+  autocmd FileType typescript set sw=2 sts=2 et
+  autocmd FileType typescript.tsx set sw=2 sts=2 et
+  autocmd FileType typescriptreact set sw=2 sts=2 et
 
   " autocmd BufReadPost public/modules/*/js/*.js :ALEDisable<cr>
 
@@ -189,14 +195,20 @@ augroup END
 " Color
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set t_Co=256 " 256 colors
-set background=dark
+" set background=light
 " colorscheme solarized
-colorscheme night-owl
+" colorscheme night-owl
+colorscheme one
+set background=light
+let g:one_allow_italics=1
 
 " Highlight current line.
 set cursorline
 hi clear CursorLine
 hi CursorLine cterm=underline gui=underline
+
+" True Colors for tmux
+" https://github.com/tmux/tmux/issues/1246
 if (has("termguicolors"))
   let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
   let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
@@ -208,7 +220,7 @@ endif
 " Lightline Config
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:lightline = {
-      \ 'colorscheme': 'nightowl',
+      \ 'colorscheme': 'one',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
@@ -236,9 +248,12 @@ let g:ale_linters = {
       \ 'typescript.tsx': ['eslint', 'tsserver'],
       \ 'php': ['php', 'phpcs'],
       \ 'python': ['pylint'],
+      \ 'elixir': ['elixir-ls'],
       \}
 " Disabled Fixers
-            "\'javascript': ['prettier'],
+"
+            "\'php': ['php_cs_fixer'],
+            " \'javascript': ['prettier'],
 let g:ale_fixers = {
             \'elixir': ['mix_format'],
             \'python': ['black'],
@@ -251,6 +266,8 @@ let g:ale_php_phpcs_options = "--exclude=Squiz.Functions.MultiLineFunctionDeclar
 " let g:ale_php_phpcs_options = "--exclude=Generic.Commenting.Todo,Generic.Files.LineLength,PSR2.ControlStructures.ControlStructureSpacing,CakePHP.Strings.ConcatenationSpacing,PSR1.Files.SideEffects"
 
 let g:ale_python_black_options = "--skip-string-normalization"
+
+let g:ale_elixir_elixir_ls_release = "/Users/liam/elixir-ls/"
 nnoremap <leader>a :ALENextWrap<cr>
 nnoremap <leader>A :ALEPreviousWrap<cr>
 nnoremap <leader>kA :ALEStopAllLSPs<cr>
