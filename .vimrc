@@ -200,10 +200,8 @@ augroup END
 " Color
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set t_Co=256 " 256 colors
-set background=light
-colorscheme one
-" colorscheme one
-" set background=light
+set background=dark
+colorscheme night-owl
 let g:one_allow_italics=1
 
 " Highlight current line.
@@ -224,7 +222,7 @@ endif
 " Lightline Config
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:lightline = {
-      \ 'colorscheme': 'one',
+      \ 'colorscheme': 'nightowl',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
