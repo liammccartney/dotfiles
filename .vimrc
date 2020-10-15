@@ -33,6 +33,10 @@ call plug#begin('~/.vim/plugged')
   Plug 'leafgarland/typescript-vim'
   Plug 'peitalin/vim-jsx-typescript'
   Plug 'MaxMEllon/vim-jsx-pretty'
+  Plug 'tweekmonster/django-plus.vim'
+  Plug 'prettier/vim-prettier'
+  Plug 'OmniSharp/omnisharp-vim'
+  Plug 'nickspoons/vim-sharpenup'
 call plug#end()
 
 """""""""""""""""""""""""""""
@@ -172,10 +176,11 @@ augroup vimrcEx
   autocmd FileType python set sw=4 sts=4 et
   autocmd FileType php set sw=4 sts=4 et
   autocmd FileType html set sw=4 sts=4 et
-  autocmd FileType javascript set sw=4 sts=4 et
-  autocmd FileType typescript set sw=2 sts=2 et
-  autocmd FileType typescript.tsx set sw=2 sts=2 et
-  autocmd FileType typescriptreact set sw=2 sts=2 et
+  autocmd FileType javascript set sw=2 sts=2 et
+  autocmd FileType typescript set sw=4 sts=4 et
+  autocmd FileType typescript.tsx set sw=4 sts=4 et
+  autocmd FileType typescriptreact set sw=4 sts=4 et
+  autocmd FileType htmldjango set sw=4 sts=4 et
 
   " autocmd BufReadPost public/modules/*/js/*.js :ALEDisable<cr>
 
@@ -195,11 +200,10 @@ augroup END
 " Color
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set t_Co=256 " 256 colors
-" set background=light
-" colorscheme solarized
-" colorscheme night-owl
-colorscheme one
 set background=light
+colorscheme one
+" colorscheme one
+" set background=light
 let g:one_allow_italics=1
 
 " Highlight current line.
@@ -253,10 +257,11 @@ let g:ale_linters = {
 " Disabled Fixers
 "
             "\'php': ['php_cs_fixer'],
-            " \'javascript': ['prettier'],
+            "\'javascript': ['prettier'],
+            "\'cs': ['uncrustify'],
 let g:ale_fixers = {
-            \'elixir': ['mix_format'],
             \'python': ['black'],
+            \'elixir': ['mix_format'],
             \'typescript': ['prettier'],
             \'typescriptreact': ['prettier'],
             \'json': ['prettier'],
@@ -428,6 +433,8 @@ function! RunTests(filename)
       exec ":racket " . a:filename
     elseif strlen(glob("test/**/*test.ex*"))
       exec ":!mix test " . a:filename
+    elseif strlen(glob("*Tests.cs"))
+      exec ":!dotnet test " . a:filename
     end
 endfunction
 
@@ -485,7 +492,7 @@ fun! CleanExtraSpaces()
     call setreg('/', old_query)
 endfun
 
-autocmd BufWritePre *.php,*.phtml,*.ctp,*.txt,*.js,*.py,*.wiki,*.sh,*.coffee,*.rkt,*.ex,*.exs,*.rb,*.erl :call CleanExtraSpaces()
+autocmd BufWritePre *.php,*.phtml,*.ctp,*.txt,*.js,*.py,*.wiki,*.sh,*.coffee,*.rkt,*.ex,*.exs,*.rb,*.erl,*.md,*.leex,*.eex :call CleanExtraSpaces()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PHP CS Config
@@ -511,3 +518,9 @@ endif
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
 endif
+
+"
+" Sharpen Up
+"
+let g:sharpenup_map_prefix = '\'
+
