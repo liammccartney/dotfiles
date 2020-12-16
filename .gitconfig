@@ -1,13 +1,13 @@
 [core]
   # Excludesfiles allows us to set a global list of things to ignore
-	excludesfile = ~/.gitignore_global
-	editor = vim
+  excludesfile = ~/.gitignore_global
+  editor = vim
   # pager = less -F -X
   pager = delta --dark --theme='Solarized (dark)'
 
 # These are custom color options for the console
 [color]
-    ui = auto
+  ui = auto
 
 [color "status"]
   untracked = cyan
@@ -62,9 +62,9 @@
 
   push-this = "!. ~/.githelpers && push_this"
 [user]
-	name = Liam McCartney
-	email = liam.mccartney@gmail.com
+  name = Liam McCartney
+  email = liam.mccartney@gmail.com
 [push]
-	default = simple
+  default = simple
 [diff]
-	tool = vimdiff
+  tool = vimdiff
