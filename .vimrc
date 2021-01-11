@@ -11,42 +11,62 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.vim/plugged')
+  " Theme
   Plug 'haishanh/night-owl.vim'
-  Plug 'rakr/vim-one'
-  Plug 'altercation/vim-colors-solarized'
+
+  " Status Bar
   Plug 'itchyny/lightline.vim'
+
+  " tpope, lord of vim plugins
   Plug 'tpope/vim-fugitive'
-  Plug 'dense-analysis/ale'
   Plug 'tpope/vim-commentary'
+  Plug 'tpope/vim-abolish'
+
+  " linting
+  Plug 'dense-analysis/ale'
+  "     Include lint results in lightline
+  Plug 'maximbaz/lightline-ale'
+
+  " file finder, buffer manager
   Plug 'ctrlpvim/ctrlp.vim'
+
+  " Extends % to match many more kinds of surrounding symbols
   Plug 'tmhedberg/matchit'
+
+  " ctags explorer for current file
   Plug 'majutsushi/tagbar'
+
+  " Generate ctags in background
   Plug 'ludovicchabant/vim-gutentags'
+
+  " File tree
   Plug 'preservim/nerdtree'
+
+  " For when tags fail, there's always Ack
+  " Configure this to use `ag`
   Plug 'mileszs/ack.vim'
+  
+  " Syntax
   Plug 'elixir-editors/vim-elixir'
   Plug 'cespare/vim-toml'
   Plug 'ElmCast/elm-vim'
-  Plug 'tpope/vim-abolish'
-  Plug 'pangloss/vim-javascript'
-  Plug 'jelera/vim-javascript-syntax'
   Plug 'leafgarland/typescript-vim'
+  Plug 'jlcrochet/vim-razor'
+
+  " Language specifc semantics
   Plug 'Quramy/tsuquyomi'
-  Plug 'MaxMEllon/vim-jsx-pretty'
-  Plug 'tweekmonster/django-plus.vim'
-  Plug 'prettier/vim-prettier'
   Plug 'OmniSharp/omnisharp-vim'
   Plug 'nickspoons/vim-sharpenup'
+
+  " Autocomplete
   Plug 'Shougo/deoplete.nvim'
   Plug 'roxma/nvim-yarp'
   Plug 'roxma/vim-hug-neovim-rpc'
-  Plug 'jlcrochet/vim-razor'
 call plug#end()
 
 """""""""""""""""""""""""""""
 " Basic Editing Configuration
 """""""""""""""""""""""""""""
-set rtp+=/usr/local/opt/fzf
 set nocompatible
 " allow unsaved background buggers and remember marks/undo for them
 set hidden
@@ -229,13 +249,58 @@ endif
 let g:lightline = {
       \ 'colorscheme': 'nightowl',
       \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \   'right': [
+      \     ['linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok'],
+      \     ['lineinfo'], ['percent'],
+      \     ['fileformat', 'fileencoding', 'filetype', 'sharpenup']
+      \   ]
       \ },
-      \ 'component_function': {
-      \   'gitbranch': 'FugitiveHead'
+      \ 'inactive': {
+      \   'right': [['lineinfo'], ['percent'], ['sharpenup']]
       \ },
+      \ 'component': {
+      \   'sharpenup': sharpenup#statusline#Build()
+      \ },
+      \ 'component_expand': {
+      \   'linter_checking': 'lightline#ale#checking',
+      \   'linter_infos': 'lightline#ale#infos',
+      \   'linter_warnings': 'lightline#ale#warnings',
+      \   'linter_errors': 'lightline#ale#errors',
+      \   'linter_ok': 'lightline#ale#ok'
+      \  },
+      \ 'component_type': {
+      \   'linter_checking': 'right',
+      \   'linter_infos': 'right',
+      \   'linter_warnings': 'warning',
+      \   'linter_errors': 'error',
+      \   'linter_ok': 'right'
+      \  }
+      \}
+let g:lightline.component_type = {
+      \     'linter_checking': 'right',
+      \     'linter_infos': 'right',
+      \     'linter_warnings': 'warning',
+      \     'linter_errors': 'error',
+      \     'linter_ok': 'right',
       \ }
+
+let g:sharpenup_statusline_opts = { 'Text': '%s (%p/%P)' }
+let g:sharpenup_statusline_opts.Highlight = 0
+
+augroup OmniSharpIntegrations
+    autocmd!
+    autocmd User OmniSharpProjectUpdated,OmniSharpReady call lightline#update()
+augroup END
+
+let g:asyncomplete_auto_popup = 1
+let g:asyncomplete_auto_completeopt = 0
+
+" Use unicode chars for ale indicators in the statusline
+let g:lightline#ale#indicator_checking = "\uf110 "
+let g:lightline#ale#indicator_infos = "\uf129 "
+let g:lightline#ale#indicator_warnings = "\uf071 "
+let g:lightline#ale#indicator_errors = "\uf05e "
+let g:lightline#ale#indicator_ok = "\uf00c "
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Ale Config
@@ -447,7 +512,7 @@ function! RunTests(filename)
   elseif strlen(glob("test/**/*test.ex*"))
     exec ":!mix test " . a:filename
   elseif strlen(glob("*UnitTests/**/*Tests.cs"))
-    exec ":!dotnet test --filter " . expand("%:t:r") 
+    exec ":OmniSharpRunTestsInFile"
   end
 endfunction
 
@@ -551,8 +616,9 @@ inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 """""
 " OmniSharp
 """"""
-" let g:OmniSharp_selector_findusages = 'fzf'
+let g:OmniSharp_selector_ui = 'ctrlp'
 
+" Popup configuration
 let g:OmniSharp_popup_position = 'peek'
 let g:OmniSharp_popup_options = {
 \ 'highlight': 'Normal',
