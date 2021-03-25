@@ -21,6 +21,10 @@ call plug#begin('~/.vim/plugged')
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-abolish'
+  Plug 'tpope/vim-surround'
+
+  " Git Helpers
+  Plug 'airblade/vim-gitgutter'
 
   " linting
   Plug 'dense-analysis/ale'
@@ -41,6 +45,7 @@ call plug#begin('~/.vim/plugged')
 
   " File tree
   Plug 'preservim/nerdtree'
+  Plug 'Xuyuanp/nerdtree-git-plugin'
 
   " For when tags fail, there's always Ack
   " Configure this to use `ag`
@@ -57,6 +62,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'Quramy/tsuquyomi'
   Plug 'OmniSharp/omnisharp-vim'
   Plug 'nickspoons/vim-sharpenup'
+  Plug 'dart-lang/dart-vim-plugin'
 
   " Autocomplete
   Plug 'Shougo/deoplete.nvim'
@@ -200,7 +206,7 @@ augroup vimrcEx
   " Python should have 4 spaces of indentation
   autocmd FileType python set sw=4 sts=4 et
   autocmd FileType php set sw=4 sts=4 et
-  autocmd FileType html set sw=4 sts=4 et
+  autocmd FileType html set sw=2 sts=2 et
   autocmd FileType javascript set sw=2 sts=2 et
   autocmd FileType typescript set sw=2 sts=2 et
   autocmd FileType typescript.tsx set sw=4 sts=4 et
@@ -318,11 +324,12 @@ highlight ALEError cterm=underline,bold,italic ctermfg=Red
 """"
 " \ 'typescriptreact': ['eslint', 'tsserver'],
 " \ 'typescript.tsx': ['eslint', 'tsserver'],
+" \ 'javascript': ['xo'],
 """
 let g:ale_linters = {
+      \'javascript': ['eslint'],
       \ 'cs': ['OmniSharp'],
-      \ 'javascript': ['eslint'],
-      \ 'typescript': ['eslint', 'tsserver'],
+      \ 'typescript': ['tsserver', 'eslint'],
       \ 'php': ['php', 'phpcs'],
       \ 'python': ['pylint'],
       \ 'elixir': ['elixir-ls'],
@@ -330,14 +337,16 @@ let g:ale_linters = {
 " Disabled Fixers
 "
 "\'php': ['php_cs_fixer'],
-"\'javascript': ['prettier'],
 "\'cs': ['uncrustify'],
       " \'typescript': ['prettier'],
       " \'typescriptreact': ['prettier'],
+      " \'javascript': ['prettier'],
 let g:ale_fixers = {
       \'python': ['black'],
+      \'typescript': ['prettier'],
       \'elixir': ['mix_format'],
       \'json': ['prettier'],
+      \'html': ['prettier'],
       \}
 let g:ale_php_phpcs_standard = "PSR12"
 let g:ale_php_phpcs_options = "--exclude=Squiz.Functions.MultiLineFunctionDeclaration"
@@ -346,8 +355,12 @@ let g:ale_php_phpcs_options = "--exclude=Squiz.Functions.MultiLineFunctionDeclar
 " let g:ale_python_black_options = "--skip-string-normalization"
 
 let g:ale_elixir_elixir_ls_release = "/Users/liam/LanguageServers/elixir-ls/"
-nnoremap <leader>a :ALENextWrap<cr>
-nnoremap <leader>A :ALEPreviousWrap<cr>
+
+let g:ale_dart_dartanalyzer_executable = "dart analyze"
+let g:ale_dart_dartfmt_executable = "dart format"
+
+nnoremap <leader>a <Plug>(ale_next_wrap_error)
+nnoremap <leader>A <Plug>(ale_previous_wrap_error)
 nnoremap <leader>kA :ALEStopAllLSPs<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -372,7 +385,7 @@ map <silent> <leader><cr> :noh<cr>
 map <leader>q :e ~/buffer<cr> :set ft=markdown<cr>
 map <leader>pp :setlocal paste!<cr>
 map <leader>e :e! ~/.vimrc<cr>
-map <leader>cc :cclose<cr> :pclose<cr>
+map <leader>cc :cclose<cr> :pclose<cr> :lclose<cr>
 
 map <Up> <C-o>
 map <Down> <C-i>
@@ -509,7 +522,7 @@ function! RunTests(filename)
     exec ":!elm-test " . a:filename
   elseif strlen(glob("*test.rkt"))
     exec ":racket " . a:filename
-  elseif strlen(glob("test/**/*test.ex*"))
+  elseif filereadable("mix.exs")
     exec ":!mix test " . a:filename
   elseif strlen(glob("*UnitTests/**/*Tests.cs"))
     exec ":OmniSharpRunTestsInFile"
@@ -554,7 +567,7 @@ command! OpenChangedFiles :call OpenChangedFiles()
 let g:ctrlp_map = '<c-f>'
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_custom_ignore = {
-      \ 'dir':  '\v[\/]\.(git|hg|svn)|node_modules|vendor|elm-stuff|plugins|tmp|_build|deps|katielovell\/public|FulcrumProduct\/wwwroot\/codecoverage|netcoreapp3.1$',
+      \ 'dir':  '\v[\/]\.(git|hg|svn)|node_modules|vendor|elm-stuff|plugins|tmp|_build|deps|katielovell\/public|FulcrumProduct\/wwwroot\/codecoverage|netcoreapp3.1|net5.0$',
       \ 'file': '\v\.(exe|so|dll|DS_Store|beam)$',
       \ 'link': '',
       \ }
@@ -570,7 +583,7 @@ fun! CleanExtraSpaces()
   call setreg('/', old_query)
 endfun
 
-autocmd BufWritePre *.php,*.phtml,*.ctp,*.txt,*.js,*.py,*.wiki,*.sh,*.coffee,*.rkt,*.ex,*.exs,*.rb,*.erl,*.md,*.leex,*.eex,*.razor,*.cs :call CleanExtraSpaces()
+autocmd BufWritePre *.php,*.phtml,*.ctp,*.txt,*.js,*.py,*.wiki,*.sh,*.coffee,*.rkt,*.ex,*.exs,*.rb,*.erl,*.md,*.leex,*.eex,*.razor,*.cs,*.ts,*.html :call CleanExtraSpaces()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PHP CS Config
@@ -586,9 +599,12 @@ nmap <leader>t :TagbarToggle<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Gutentags Config
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-if filereadable('.ctagsignore')
-  let g:gutentags_ctags_exclude = ['@.ctagsignore']
-endif
+fun FindCtagsIgnore()
+  if filereadable(findfile(".ctagsignore", ".;"))
+    let g:gutentags_ctags_exclude = ["@" . findfile(".ctagsignore", ".;")]
+  endif
+endfun
+call FindCtagsIgnore()
 
 if filereadable('./FulcrumProduct.sln')
   let g:gutentags_enabled = 0
@@ -641,4 +657,5 @@ let g:OmniSharp_highlight_groups = {
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" Vim-ale handles TypeScript quickfix, so tell Tsuquyomi not to do it.
 let g:tsuquyomi_disable_quickfix = 1
-
+nnoremap <leader>tf :TsuQuickFix<cr>
+let g:tsuquyomi_shortest_import_path = 1
