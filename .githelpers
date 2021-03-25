@@ -77,6 +77,9 @@ cleanup_branches() {
         elif (git rev-parse --verify master > /dev/null 2>&1)
         then
             main_branch=master
+        elif (git rev-parse --verify main > /dev/null 2>&1)
+        then
+            main_branch=main
         else
             echo You did not provide a branch and this repo does not have a devlop or master branch
             exit 1
@@ -109,11 +112,11 @@ cleanup_branches() {
 
 # Pushes the current branch to a new remote and sets upstream
 push_this() {
-	if [ -z "$1" ]
-	then
-		origin=origin
-	else
-		origin="$1"
-	fi
-	git push "$origin" $(git current-branch) --set-upstream
+  if [ -z "$1" ]
+  then
+    origin=origin
+  else
+    origin="$1"
+  fi
+  git push "$origin" $(git current-branch) --set-upstream
 }
