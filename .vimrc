@@ -59,15 +59,13 @@ call plug#begin('~/.vim/plugged')
   Plug 'jlcrochet/vim-razor'
 
   " Language specifc semantics
-  Plug 'Quramy/tsuquyomi'
+  " Plug 'Quramy/tsuquyomi'
   Plug 'OmniSharp/omnisharp-vim'
   Plug 'nickspoons/vim-sharpenup'
-  Plug 'dart-lang/dart-vim-plugin'
+  " Plug 'dart-lang/dart-vim-plugin'
 
   " Autocomplete
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 
 """""""""""""""""""""""""""""
@@ -317,6 +315,7 @@ let g:ale_lint_delay = 0
 let g:ale_set_quickfix = 0
 let g:ale_set_loclist = 0
 let g:ale_fix_on_save = 1
+let g:ale_disable_lsp = 1
 
 highlight ALEWarning cterm=underline,bold,italic ctermfg=Yellow
 highlight ALEError cterm=underline,bold,italic ctermfg=Red
@@ -359,8 +358,8 @@ let g:ale_elixir_elixir_ls_release = "/Users/liam/LanguageServers/elixir-ls/"
 let g:ale_dart_dartanalyzer_executable = "dart analyze"
 let g:ale_dart_dartfmt_executable = "dart format"
 
-nnoremap <leader>a <Plug>(ale_next_wrap_error)
-nnoremap <leader>A <Plug>(ale_previous_wrap_error)
+nmap <silent> <leader>a <Plug>(ale_next_wrap_error)
+nmap <silent> <leader>a <Plug>(ale_previous_wrap_error)
 nnoremap <leader>kA :ALEStopAllLSPs<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -656,6 +655,11 @@ let g:OmniSharp_highlight_groups = {
 "" Tsuquyomi
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" Vim-ale handles TypeScript quickfix, so tell Tsuquyomi not to do it.
-let g:tsuquyomi_disable_quickfix = 1
-nnoremap <leader>tf :TsuQuickFix<cr>
-let g:tsuquyomi_shortest_import_path = 1
+" let g:tsuquyomi_disable_quickfix = 1
+" nnoremap <leader>tf :TsuQuickFix<cr>
+" let g:tsuquyomi_shortest_import_path = 1
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" Coc
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nmap <leader>qf  <Plug>(coc-fix-current)
