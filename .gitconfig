@@ -60,6 +60,9 @@
   current-branch = rev-parse --abbrev-ref HEAD
   cb = !git current-branch
 
+  wip = !git -m WIP
+  awip = !git amend -m WIP
+
   push-this = "!. ~/.githelpers && push_this"
 [user]
   name = Liam McCartney
