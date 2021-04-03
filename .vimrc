@@ -12,7 +12,9 @@ endif
 
 call plug#begin('~/.vim/plugged')
   " Theme
-  Plug 'haishanh/night-owl.vim'
+  Plug 'ghifarit53/tokyonight-vim'
+  Plug 'sheerun/vim-polyglot'
+  Plug 'ryanoasis/vim-devicons'
 
   " Status Bar
   Plug 'itchyny/lightline.vim'
@@ -50,11 +52,11 @@ call plug#begin('~/.vim/plugged')
   Plug 'mileszs/ack.vim'
   
   " Syntax
-  Plug 'elixir-editors/vim-elixir'
-  Plug 'cespare/vim-toml'
-  Plug 'ElmCast/elm-vim'
-  Plug 'leafgarland/typescript-vim'
-  Plug 'jlcrochet/vim-razor'
+  " Plug 'elixir-editors/vim-elixir'
+  " Plug 'cespare/vim-toml'
+  " Plug 'ElmCast/elm-vim'
+  " Plug 'leafgarland/typescript-vim'
+  " Plug 'jlcrochet/vim-razor'
 
   " Language specifc semantics
   " Plug 'Quramy/tsuquyomi'
@@ -159,16 +161,6 @@ set nojoinspaces
 " If a file is changed outside of vim, automatically reload it without asking
 set autoread
 
-"""""""""""""""""""""""""""
-" I have turnd this off, because I don't know if it's necessary anymore
-" I suspect it might have been the culprit for my broken jsx & typescript
-" syntax highlighting, but I have no proof as of March 30 2020
-"""""""""""""""""""""""""""
-" Use the old vim regex engine (version 1, as opposed to version 2, which was
-" introduced in Vim 7.3.969). The Ruby syntax highlighting is significantly
-" slower with the new regex engine.
-" set re=1
-
 " Stop SQL language files from doing unholy things to the C-c key
 let g:omni_sql_no_default_maps = 1
 
@@ -227,29 +219,22 @@ augroup END
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Color
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" set t_Co=256 " 256 colors
-set background=dark
-colorscheme night-owl
-let g:one_allow_italics=1
+set termguicolors
+let g:tokyonight_style = 'night' " available: night, storm
+let g:tokyonight_enable_italic = 1
+let g:tokyonight_transparent_background = 1
+colorscheme tokyonight
 
 " Highlight current line.
 set cursorline
 hi clear CursorLine
 hi CursorLine cterm=underline gui=underline
 
-" True Colors for tmux
-" https://github.com/tmux/tmux/issues/1246
-if (has("termguicolors"))
-  let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
-  let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
-  set termguicolors
-endif
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Lightline Config
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:lightline = {
-      \ 'colorscheme': 'nightowl',
+      \ 'colorscheme': 'tokyonight',
       \ 'active': {
       \   'right': [
       \     ['lineinfo'], ['percent'],
@@ -593,7 +578,7 @@ let g:ale_sign_info = '❗️'
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" Coc
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set encoding=utf-8
+set encoding=UTF-8
 set updatetime=300
 set cmdheight=2
 set shortmess+=c
