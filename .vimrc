@@ -26,10 +26,8 @@ call plug#begin('~/.vim/plugged')
   " Git Helpers
   Plug 'airblade/vim-gitgutter'
 
-  " linting
+  " ALE, for Linting
   Plug 'dense-analysis/ale'
-  "     Include lint results in lightline
-  Plug 'maximbaz/lightline-ale'
 
   " file finder, buffer manager
   Plug 'ctrlpvim/ctrlp.vim'
@@ -229,7 +227,7 @@ augroup END
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Color
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set t_Co=256 " 256 colors
+" set t_Co=256 " 256 colors
 set background=dark
 colorscheme night-owl
 let g:one_allow_italics=1
@@ -254,7 +252,6 @@ let g:lightline = {
       \ 'colorscheme': 'nightowl',
       \ 'active': {
       \   'right': [
-      \     ['linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok'],
       \     ['lineinfo'], ['percent'],
       \     ['fileformat', 'fileencoding', 'filetype', 'sharpenup']
       \   ]
@@ -265,28 +262,7 @@ let g:lightline = {
       \ 'component': {
       \   'sharpenup': sharpenup#statusline#Build()
       \ },
-      \ 'component_expand': {
-      \   'linter_checking': 'lightline#ale#checking',
-      \   'linter_infos': 'lightline#ale#infos',
-      \   'linter_warnings': 'lightline#ale#warnings',
-      \   'linter_errors': 'lightline#ale#errors',
-      \   'linter_ok': 'lightline#ale#ok'
-      \  },
-      \ 'component_type': {
-      \   'linter_checking': 'right',
-      \   'linter_infos': 'right',
-      \   'linter_warnings': 'warning',
-      \   'linter_errors': 'error',
-      \   'linter_ok': 'right'
-      \  }
       \}
-let g:lightline.component_type = {
-      \     'linter_checking': 'right',
-      \     'linter_infos': 'right',
-      \     'linter_warnings': 'warning',
-      \     'linter_errors': 'error',
-      \     'linter_ok': 'right',
-      \ }
 
 let g:sharpenup_statusline_opts = { 'Text': '%s (%p/%P)' }
 let g:sharpenup_statusline_opts.Highlight = 0
@@ -298,69 +274,6 @@ augroup END
 
 let g:asyncomplete_auto_popup = 1
 let g:asyncomplete_auto_completeopt = 0
-
-" Use unicode chars for ale indicators in the statusline
-let g:lightline#ale#indicator_checking = "\uf110 "
-let g:lightline#ale#indicator_infos = "\uf129 "
-let g:lightline#ale#indicator_warnings = "\uf071 "
-let g:lightline#ale#indicator_errors = "\uf05e "
-let g:lightline#ale#indicator_ok = "\uf00c "
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Ale Config
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:ale_lint_on_text_changed = 'normal'
-let g:ale_lint_on_insert_leave = 1
-let g:ale_lint_delay = 0
-let g:ale_set_quickfix = 0
-let g:ale_set_loclist = 0
-let g:ale_fix_on_save = 1
-let g:ale_disable_lsp = 1
-
-highlight ALEWarning cterm=underline,bold,italic ctermfg=Yellow
-highlight ALEError cterm=underline,bold,italic ctermfg=Red
-
-""""
-" \ 'typescriptreact': ['eslint', 'tsserver'],
-" \ 'typescript.tsx': ['eslint', 'tsserver'],
-" \ 'javascript': ['xo'],
-"""
-let g:ale_linters = {
-      \'javascript': ['eslint'],
-      \ 'cs': ['OmniSharp'],
-      \ 'typescript': ['tsserver', 'eslint'],
-      \ 'php': ['php', 'phpcs'],
-      \ 'python': ['pylint'],
-      \ 'elixir': ['elixir-ls'],
-      \}
-" Disabled Fixers
-"
-"\'php': ['php_cs_fixer'],
-"\'cs': ['uncrustify'],
-      " \'typescript': ['prettier'],
-      " \'typescriptreact': ['prettier'],
-      " \'javascript': ['prettier'],
-let g:ale_fixers = {
-      \'python': ['black'],
-      \'typescript': ['prettier'],
-      \'elixir': ['mix_format'],
-      \'json': ['prettier'],
-      \'html': ['prettier'],
-      \}
-let g:ale_php_phpcs_standard = "PSR12"
-let g:ale_php_phpcs_options = "--exclude=Squiz.Functions.MultiLineFunctionDeclaration"
-" let g:ale_php_phpcs_options = "--exclude=Generic.Commenting.Todo,Generic.Files.LineLength,PSR2.ControlStructures.ControlStructureSpacing,CakePHP.Strings.ConcatenationSpacing,PSR1.Files.SideEffects"
-
-" let g:ale_python_black_options = "--skip-string-normalization"
-
-let g:ale_elixir_elixir_ls_release = "/Users/liam/LanguageServers/elixir-ls/"
-
-let g:ale_dart_dartanalyzer_executable = "dart analyze"
-let g:ale_dart_dartfmt_executable = "dart format"
-
-nmap <silent> <leader>a <Plug>(ale_next_wrap_error)
-nmap <silent> <leader>a <Plug>(ale_previous_wrap_error)
-nnoremap <leader>kA :ALEStopAllLSPs<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " MISC KEY MAPS
@@ -591,11 +504,6 @@ let g:php_cs_fixer_config_file = '.php_cs'
 " autocmd BufWritePost *.php silent! call PhpCsFixerFixFile()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Tagbar Config
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nmap <leader>t :TagbarToggle<CR>
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Gutentags Config
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 fun FindCtagsIgnore()
@@ -659,7 +567,100 @@ let g:OmniSharp_highlight_groups = {
 " nnoremap <leader>tf :TsuQuickFix<cr>
 " let g:tsuquyomi_shortest_import_path = 1
 
+"""""""
+"" ALE
+"" Currently only used for C# files, CoC handles everything else
+"""""""
+let g:ale_linters = {
+      \ 'cs': ['OmniSharp'],
+      \ 'typescript': []
+      \}
+nmap <silent> \a  <Plug>(ale_next_wrap_error)
+nmap <silent> \A  <Plug>(ale_previous_wrap_error)
+
+highlight ALEWarning cterm=underline,bold,italic ctermfg=Yellow
+highlight ALEError cterm=underline,bold,italic ctermfg=Red
+highlight ALEInfo cterm=underline,bold,italic ctermfg=130
+
+highlight clear ALEErrorSign
+highlight clear ALEWarningSign
+highlight clear ALEInfoSign
+
+let g:ale_sign_error = '💥'
+let g:ale_sign_warning = '😬'
+let g:ale_sign_info = '❗️'
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" Coc
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set encoding=utf-8
+set updatetime=300
+set cmdheight=2
+set shortmess+=c
+
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+if has("patch-8.1.1564")
+  " Recently vim can merge signcolumn and number column into one
+  set signcolumn=number
+else
+  set signcolumn=yes
+endif
+
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+inoremap <silent><expr> <c-@> coc#refresh()
+
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+nmap <leader>ca  <Plug>(coc-codeaction)
 nmap <leader>qf  <Plug>(coc-fix-current)
+
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gr <Plug>(coc-references)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+
+nmap <leader>rn <Plug>(coc-rename)
+
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
+nmap <silent> <leader>A <Plug>(coc-diagnostic-prev)
+nmap <silent> <leader>a <Plug>(coc-diagnostic-next)
+
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
+highlight CocWarningHighlight cterm=underline,bold,italic ctermfg=Yellow
+highlight CocErrorHighlight cterm=underline,bold,italic ctermfg=Red
+highlight CocInfoHighlight cterm=underline,bold,italic ctermfg=130
+
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+
+autocmd CursorHold * silent call CocActionAsync('highlight')
+nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+let $NVIM_TUI_ENABLE_TRUE_COLOR=1
