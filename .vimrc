@@ -12,7 +12,7 @@ endif
 
 call plug#begin('~/.vim/plugged')
   " Theme
-  Plug 'ghifarit53/tokyonight-vim'
+  Plug 'arcticicestudio/nord-vim'
   Plug 'sheerun/vim-polyglot'
   Plug 'ryanoasis/vim-devicons'
 
@@ -220,10 +220,7 @@ augroup END
 " Color
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set termguicolors
-let g:tokyonight_style = 'night' " available: night, storm
-let g:tokyonight_enable_italic = 1
-let g:tokyonight_transparent_background = 1
-colorscheme tokyonight
+colorscheme nord
 
 " Highlight current line.
 set cursorline
@@ -234,7 +231,7 @@ hi CursorLine cterm=underline gui=underline
 " Lightline Config
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:lightline = {
-      \ 'colorscheme': 'tokyonight',
+      \ 'colorscheme': 'nord',
       \ 'active': {
       \   'right': [
       \     ['lineinfo'], ['percent'],
