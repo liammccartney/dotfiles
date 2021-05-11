@@ -32,7 +32,8 @@ call plug#begin('~/.vim/plugged')
   Plug 'dense-analysis/ale'
 
   " file finder, buffer manager
-  Plug 'ctrlpvim/ctrlp.vim'
+  Plug '/usr/local/opt/fzf'
+  Plug 'junegunn/fzf.vim'
 
   " Extends % to match many more kinds of surrounding symbols
   Plug 'tmhedberg/matchit'
@@ -456,15 +457,10 @@ endfunction
 command! OpenChangedFiles :call OpenChangedFiles()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" CtrlP Config
+" FZF Config
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:ctrlp_map = '<c-f>'
-let g:ctrlp_working_path_mode = 0
-let g:ctrlp_custom_ignore = {
-      \ 'dir':  '\v[\/]\.(git|hg|svn)|node_modules|vendor|elm-stuff|plugins|tmp|_build|deps|katielovell\/public|FulcrumProduct\/wwwroot\/codecoverage|netcoreapp3.1|net5.0$',
-      \ 'file': '\v\.(exe|so|dll|DS_Store|beam)$',
-      \ 'link': '',
-      \ }
+nmap <c-f> :FZF<CR>
+nmap <c-b> :Buffers<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " CleanExtraSpaces
