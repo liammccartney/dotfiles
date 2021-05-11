@@ -3,7 +3,11 @@
   excludesfile = ~/.gitignore_global
   editor = vim
   # pager = less -F -X
-  pager = delta --dark --theme='Solarized (dark)'
+  pager = delta
+
+[delta]
+  syntax-theme = Nord
+  navigate = true
 
 # These are custom color options for the console
 [color]
