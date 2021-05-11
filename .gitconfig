@@ -3,7 +3,11 @@
   excludesfile = ~/.gitignore_global
   editor = vim
   # pager = less -F -X
-  pager = delta --dark --theme='Solarized (dark)'
+  pager = delta
+
+[delta]
+  syntax-theme = Nord
+  navigate = true
 
 # These are custom color options for the console
 [color]
@@ -59,6 +63,9 @@
 
   current-branch = rev-parse --abbrev-ref HEAD
   cb = !git current-branch
+
+  wip = !git -m WIP
+  awip = !git amend -m WIP
 
   push-this = "!. ~/.githelpers && push_this"
 [user]

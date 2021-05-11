@@ -12,7 +12,9 @@ endif
 
 call plug#begin('~/.vim/plugged')
   " Theme
-  Plug 'haishanh/night-owl.vim'
+  Plug 'arcticicestudio/nord-vim'
+  Plug 'sheerun/vim-polyglot'
+  Plug 'ryanoasis/vim-devicons'
 
   " Status Bar
   Plug 'itchyny/lightline.vim'
@@ -26,13 +28,12 @@ call plug#begin('~/.vim/plugged')
   " Git Helpers
   Plug 'airblade/vim-gitgutter'
 
-  " linting
+  " ALE, for Linting
   Plug 'dense-analysis/ale'
-  "     Include lint results in lightline
-  Plug 'maximbaz/lightline-ale'
 
   " file finder, buffer manager
-  Plug 'ctrlpvim/ctrlp.vim'
+  Plug '/usr/local/opt/fzf'
+  Plug 'junegunn/fzf.vim'
 
   " Extends % to match many more kinds of surrounding symbols
   Plug 'tmhedberg/matchit'
@@ -52,22 +53,22 @@ call plug#begin('~/.vim/plugged')
   Plug 'mileszs/ack.vim'
   
   " Syntax
-  Plug 'elixir-editors/vim-elixir'
-  Plug 'cespare/vim-toml'
-  Plug 'ElmCast/elm-vim'
-  Plug 'leafgarland/typescript-vim'
-  Plug 'jlcrochet/vim-razor'
+  " Plug 'elixir-editors/vim-elixir'
+  " Plug 'cespare/vim-toml'
+  " Plug 'ElmCast/elm-vim'
+  " Plug 'leafgarland/typescript-vim'
+  " Plug 'jlcrochet/vim-razor'
 
   " Language specifc semantics
-  Plug 'Quramy/tsuquyomi'
+  " Plug 'Quramy/tsuquyomi'
   Plug 'OmniSharp/omnisharp-vim'
   Plug 'nickspoons/vim-sharpenup'
-  Plug 'dart-lang/dart-vim-plugin'
+  " Plug 'dart-lang/dart-vim-plugin'
+
+  Plug 'RRethy/vim-hexokinase', { 'do': 'make hexokinase' }
 
   " Autocomplete
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 
 """""""""""""""""""""""""""""
@@ -163,16 +164,6 @@ set nojoinspaces
 " If a file is changed outside of vim, automatically reload it without asking
 set autoread
 
-"""""""""""""""""""""""""""
-" I have turnd this off, because I don't know if it's necessary anymore
-" I suspect it might have been the culprit for my broken jsx & typescript
-" syntax highlighting, but I have no proof as of March 30 2020
-"""""""""""""""""""""""""""
-" Use the old vim regex engine (version 1, as opposed to version 2, which was
-" introduced in Vim 7.3.969). The Ruby syntax highlighting is significantly
-" slower with the new regex engine.
-" set re=1
-
 " Stop SQL language files from doing unholy things to the C-c key
 let g:omni_sql_no_default_maps = 1
 
@@ -207,6 +198,7 @@ augroup vimrcEx
   autocmd FileType python set sw=4 sts=4 et
   autocmd FileType php set sw=4 sts=4 et
   autocmd FileType html set sw=2 sts=2 et
+  autocmd FileType hbs set sw=2 sts=2 et
   autocmd FileType javascript set sw=2 sts=2 et
   autocmd FileType typescript set sw=2 sts=2 et
   autocmd FileType typescript.tsx set sw=4 sts=4 et
@@ -231,32 +223,21 @@ augroup END
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Color
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set t_Co=256 " 256 colors
-set background=dark
-colorscheme night-owl
-let g:one_allow_italics=1
+set termguicolors
+colorscheme nord
 
 " Highlight current line.
 set cursorline
 hi clear CursorLine
 hi CursorLine cterm=underline gui=underline
 
-" True Colors for tmux
-" https://github.com/tmux/tmux/issues/1246
-if (has("termguicolors"))
-  let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
-  let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
-  set termguicolors
-endif
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Lightline Config
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:lightline = {
-      \ 'colorscheme': 'nightowl',
+      \ 'colorscheme': 'nord',
       \ 'active': {
       \   'right': [
-      \     ['linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok'],
       \     ['lineinfo'], ['percent'],
       \     ['fileformat', 'fileencoding', 'filetype', 'sharpenup']
       \   ]
@@ -267,28 +248,7 @@ let g:lightline = {
       \ 'component': {
       \   'sharpenup': sharpenup#statusline#Build()
       \ },
-      \ 'component_expand': {
-      \   'linter_checking': 'lightline#ale#checking',
-      \   'linter_infos': 'lightline#ale#infos',
-      \   'linter_warnings': 'lightline#ale#warnings',
-      \   'linter_errors': 'lightline#ale#errors',
-      \   'linter_ok': 'lightline#ale#ok'
-      \  },
-      \ 'component_type': {
-      \   'linter_checking': 'right',
-      \   'linter_infos': 'right',
-      \   'linter_warnings': 'warning',
-      \   'linter_errors': 'error',
-      \   'linter_ok': 'right'
-      \  }
       \}
-let g:lightline.component_type = {
-      \     'linter_checking': 'right',
-      \     'linter_infos': 'right',
-      \     'linter_warnings': 'warning',
-      \     'linter_errors': 'error',
-      \     'linter_ok': 'right',
-      \ }
 
 let g:sharpenup_statusline_opts = { 'Text': '%s (%p/%P)' }
 let g:sharpenup_statusline_opts.Highlight = 0
@@ -300,68 +260,6 @@ augroup END
 
 let g:asyncomplete_auto_popup = 1
 let g:asyncomplete_auto_completeopt = 0
-
-" Use unicode chars for ale indicators in the statusline
-let g:lightline#ale#indicator_checking = "\uf110 "
-let g:lightline#ale#indicator_infos = "\uf129 "
-let g:lightline#ale#indicator_warnings = "\uf071 "
-let g:lightline#ale#indicator_errors = "\uf05e "
-let g:lightline#ale#indicator_ok = "\uf00c "
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Ale Config
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:ale_lint_on_text_changed = 'normal'
-let g:ale_lint_on_insert_leave = 1
-let g:ale_lint_delay = 0
-let g:ale_set_quickfix = 0
-let g:ale_set_loclist = 0
-let g:ale_fix_on_save = 1
-
-highlight ALEWarning cterm=underline,bold,italic ctermfg=Yellow
-highlight ALEError cterm=underline,bold,italic ctermfg=Red
-
-""""
-" \ 'typescriptreact': ['eslint', 'tsserver'],
-" \ 'typescript.tsx': ['eslint', 'tsserver'],
-" \ 'javascript': ['xo'],
-"""
-let g:ale_linters = {
-      \'javascript': ['eslint'],
-      \ 'cs': ['OmniSharp'],
-      \ 'typescript': ['tsserver', 'eslint'],
-      \ 'php': ['php', 'phpcs'],
-      \ 'python': ['pylint'],
-      \ 'elixir': ['elixir-ls'],
-      \}
-" Disabled Fixers
-"
-"\'php': ['php_cs_fixer'],
-"\'cs': ['uncrustify'],
-      " \'typescript': ['prettier'],
-      " \'typescriptreact': ['prettier'],
-      " \'javascript': ['prettier'],
-let g:ale_fixers = {
-      \'python': ['black'],
-      \'typescript': ['prettier'],
-      \'elixir': ['mix_format'],
-      \'json': ['prettier'],
-      \'html': ['prettier'],
-      \}
-let g:ale_php_phpcs_standard = "PSR12"
-let g:ale_php_phpcs_options = "--exclude=Squiz.Functions.MultiLineFunctionDeclaration"
-" let g:ale_php_phpcs_options = "--exclude=Generic.Commenting.Todo,Generic.Files.LineLength,PSR2.ControlStructures.ControlStructureSpacing,CakePHP.Strings.ConcatenationSpacing,PSR1.Files.SideEffects"
-
-" let g:ale_python_black_options = "--skip-string-normalization"
-
-let g:ale_elixir_elixir_ls_release = "/Users/liam/LanguageServers/elixir-ls/"
-
-let g:ale_dart_dartanalyzer_executable = "dart analyze"
-let g:ale_dart_dartfmt_executable = "dart format"
-
-nnoremap <leader>a <Plug>(ale_next_wrap_error)
-nnoremap <leader>A <Plug>(ale_previous_wrap_error)
-nnoremap <leader>kA :ALEStopAllLSPs<cr>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " MISC KEY MAPS
@@ -562,15 +460,10 @@ endfunction
 command! OpenChangedFiles :call OpenChangedFiles()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" CtrlP Config
+" FZF Config
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:ctrlp_map = '<c-f>'
-let g:ctrlp_working_path_mode = 0
-let g:ctrlp_custom_ignore = {
-      \ 'dir':  '\v[\/]\.(git|hg|svn)|node_modules|vendor|elm-stuff|plugins|tmp|_build|deps|katielovell\/public|FulcrumProduct\/wwwroot\/codecoverage|netcoreapp3.1|net5.0$',
-      \ 'file': '\v\.(exe|so|dll|DS_Store|beam)$',
-      \ 'link': '',
-      \ }
+nmap <c-f> :FZF<CR>
+nmap <c-b> :Buffers<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " CleanExtraSpaces
@@ -590,11 +483,6 @@ autocmd BufWritePre *.php,*.phtml,*.ctp,*.txt,*.js,*.py,*.wiki,*.sh,*.coffee,*.r
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:php_cs_fixer_config_file = '.php_cs'
 " autocmd BufWritePost *.php silent! call PhpCsFixerFixFile()
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Tagbar Config
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nmap <leader>t :TagbarToggle<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Gutentags Config
@@ -652,10 +540,139 @@ let g:OmniSharp_highlight_groups = {
 \ 'ExcludedCode': 'NonText'
 \}
 
+"""""""
+"" ALE
+"" Currently only used for C# files, CoC handles everything else
+"""""""
+let g:ale_linters = {
+      \ 'cs': ['OmniSharp'],
+      \ 'typescript': [],
+      \ 'python': [],
+      \ 'terraform': []
+      \}
+autocmd FileType cs nmap <silent> <leader>a  <Plug>(ale_next_wrap_error)
+autocmd FileType cs nmap <silent> <leader>A  <Plug>(ale_previous_wrap_error)
+
+highlight ALEWarning cterm=underline,bold,italic ctermfg=Yellow
+highlight ALEError cterm=underline,bold,italic ctermfg=Red
+highlight ALEInfo cterm=underline,bold,italic ctermfg=130
+
+highlight clear ALEErrorSign
+highlight clear ALEWarningSign
+highlight clear ALEInfoSign
+
+let g:ale_sign_error = '💥'
+let g:ale_sign_warning = '😬'
+let g:ale_sign_info = '❗️'
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" Tsuquyomi
+"" Coc
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" Vim-ale handles TypeScript quickfix, so tell Tsuquyomi not to do it.
-let g:tsuquyomi_disable_quickfix = 1
-nnoremap <leader>tf :TsuQuickFix<cr>
-let g:tsuquyomi_shortest_import_path = 1
+set encoding=UTF-8
+set updatetime=300
+set cmdheight=2
+set shortmess+=c
+set signcolumn=yes
+
+augroup coc
+  autocmd FileType typescript call ConfigureCoc()
+  autocmd FileType html call ConfigureCoc()
+  autocmd FileType python call ConfigureCoc()
+  autocmd FileType terraform call ConfigureCoc()
+augroup END
+
+fun! ConfigureCoc()
+  inoremap <silent><expr> <TAB>
+        \ pumvisible() ? "\<C-n>" :
+        \ <SID>check_back_space() ? "\<TAB>" :
+        \ coc#refresh()
+  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+  function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
+  endfunction
+
+  inoremap <silent><expr> <c-@> coc#refresh()
+
+  inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+        \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+  nmap <leader>ca  <Plug>(coc-codeaction)
+  nmap <leader>qf  <Plug>(coc-fix-current)
+
+  nmap <silent> gd <Plug>(coc-definition)
+  nmap <silent> gr <Plug>(coc-references)
+  nmap <silent> gy <Plug>(coc-type-definition)
+  nmap <silent> gi <Plug>(coc-implementation)
+
+  nmap <leader>rn <Plug>(coc-rename)
+
+  nnoremap <silent> K :call <SID>show_documentation()<CR>
+  function! s:show_documentation()
+    if (index(['vim','help'], &filetype) >= 0)
+      execute 'h '.expand('<cword>')
+    elseif (coc#rpc#ready())
+      call CocActionAsync('doHover')
+    else
+      execute '!' . &keywordprg . " " . expand('<cword>')
+    endif
+  endfunction
+
+  xmap <leader>f  <Plug>(coc-format-selected)
+  nmap <leader>f  <Plug>(coc-format-selected)
+
+  nmap <silent> <leader>A <Plug>(coc-diagnostic-prev)
+  nmap <silent> <leader>a <Plug>(coc-diagnostic-next)
+
+  xmap <leader>f  <Plug>(coc-format-selected)
+  nmap <leader>f  <Plug>(coc-format-selected)
+
+  highlight CocWarningHighlight cterm=underline,bold,italic ctermfg=Yellow
+  highlight CocErrorHighlight cterm=underline,bold,italic ctermfg=Red
+  highlight CocInfoHighlight cterm=underline,bold,italic ctermfg=130
+
+  command! -nargs=0 Prettier :CocCommand prettier.formatFile
+
+  autocmd CursorHold * silent call CocActionAsync('highlight')
+  nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+  command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+
+
+  autocmd BufNewFile,BufRead *.razor call TextEnableCodeSnip('cs', '@code {', '\n}', 'SpecialComment')
+endfun
+
+" Enables vaguely correct syntax highlighting for razor files
+function! TextEnableCodeSnip(filetype,start,end,textSnipHl) abort
+  let ft=toupper(a:filetype)
+  let group='textGroup'.ft
+  if exists('b:current_syntax')
+    let s:current_syntax=b:current_syntax
+    " Remove current syntax definition, as some syntax files (e.g. cpp.vim)
+    " do nothing if b:current_syntax is defined.
+    unlet b:current_syntax
+  endif
+  execute 'syntax include @'.group.' syntax/'.a:filetype.'.vim'
+  try
+    execute 'syntax include @'.group.' after/syntax/'.a:filetype.'.vim'
+  catch
+  endtry
+  if exists('s:current_syntax')
+    let b:current_syntax=s:current_syntax
+  else
+    unlet b:current_syntax
+  endif
+  execute 'syntax region textSnip'.ft.'
+        \ matchgroup='.a:textSnipHl.'
+        \ keepend
+        \ start="'.a:start.'" end="'.a:end.'"
+        \ contains=@'.group
+endfunction
+
+
+""""""""""""
+" hexokinase
+""""""""""""
+let g:Hexokinase_highlighters = ['sign_column']
