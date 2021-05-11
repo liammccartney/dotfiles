@@ -65,6 +65,8 @@ call plug#begin('~/.vim/plugged')
   Plug 'nickspoons/vim-sharpenup'
   " Plug 'dart-lang/dart-vim-plugin'
 
+  Plug 'RRethy/vim-hexokinase', { 'do': 'make hexokinase' }
+
   " Autocomplete
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
@@ -196,6 +198,7 @@ augroup vimrcEx
   autocmd FileType python set sw=4 sts=4 et
   autocmd FileType php set sw=4 sts=4 et
   autocmd FileType html set sw=2 sts=2 et
+  autocmd FileType hbs set sw=2 sts=2 et
   autocmd FileType javascript set sw=2 sts=2 et
   autocmd FileType typescript set sw=2 sts=2 et
   autocmd FileType typescript.tsx set sw=4 sts=4 et
@@ -537,24 +540,18 @@ let g:OmniSharp_highlight_groups = {
 \ 'ExcludedCode': 'NonText'
 \}
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" Tsuquyomi
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" Vim-ale handles TypeScript quickfix, so tell Tsuquyomi not to do it.
-" let g:tsuquyomi_disable_quickfix = 1
-" nnoremap <leader>tf :TsuQuickFix<cr>
-" let g:tsuquyomi_shortest_import_path = 1
-
 """""""
 "" ALE
 "" Currently only used for C# files, CoC handles everything else
 """""""
 let g:ale_linters = {
       \ 'cs': ['OmniSharp'],
-      \ 'typescript': []
+      \ 'typescript': [],
+      \ 'python': [],
+      \ 'terraform': []
       \}
-nmap <silent> \a  <Plug>(ale_next_wrap_error)
-nmap <silent> \A  <Plug>(ale_previous_wrap_error)
+autocmd FileType cs nmap <silent> <leader>a  <Plug>(ale_next_wrap_error)
+autocmd FileType cs nmap <silent> <leader>A  <Plug>(ale_previous_wrap_error)
 
 highlight ALEWarning cterm=underline,bold,italic ctermfg=Yellow
 highlight ALEError cterm=underline,bold,italic ctermfg=Red
@@ -575,75 +572,79 @@ set encoding=UTF-8
 set updatetime=300
 set cmdheight=2
 set shortmess+=c
+set signcolumn=yes
 
-" Always show the signcolumn, otherwise it would shift the text each time
-" diagnostics appear/become resolved.
-if has("patch-8.1.1564")
-  " Recently vim can merge signcolumn and number column into one
-  set signcolumn=number
-else
-  set signcolumn=yes
-endif
+augroup coc
+  autocmd FileType typescript call ConfigureCoc()
+  autocmd FileType html call ConfigureCoc()
+  autocmd FileType python call ConfigureCoc()
+  autocmd FileType terraform call ConfigureCoc()
+augroup END
 
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+fun! ConfigureCoc()
+  inoremap <silent><expr> <TAB>
+        \ pumvisible() ? "\<C-n>" :
+        \ <SID>check_back_space() ? "\<TAB>" :
+        \ coc#refresh()
+  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
+  function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
+  endfunction
 
-inoremap <silent><expr> <c-@> coc#refresh()
+  inoremap <silent><expr> <c-@> coc#refresh()
 
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+  inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+        \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
-nmap <leader>ca  <Plug>(coc-codeaction)
-nmap <leader>qf  <Plug>(coc-fix-current)
+  nmap <leader>ca  <Plug>(coc-codeaction)
+  nmap <leader>qf  <Plug>(coc-fix-current)
 
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gr <Plug>(coc-references)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
+  nmap <silent> gd <Plug>(coc-definition)
+  nmap <silent> gr <Plug>(coc-references)
+  nmap <silent> gy <Plug>(coc-type-definition)
+  nmap <silent> gi <Plug>(coc-implementation)
 
-nmap <leader>rn <Plug>(coc-rename)
+  nmap <leader>rn <Plug>(coc-rename)
 
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
-    call CocActionAsync('doHover')
-  else
-    execute '!' . &keywordprg . " " . expand('<cword>')
-  endif
-endfunction
+  nnoremap <silent> K :call <SID>show_documentation()<CR>
+  function! s:show_documentation()
+    if (index(['vim','help'], &filetype) >= 0)
+      execute 'h '.expand('<cword>')
+    elseif (coc#rpc#ready())
+      call CocActionAsync('doHover')
+    else
+      execute '!' . &keywordprg . " " . expand('<cword>')
+    endif
+  endfunction
 
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
+  xmap <leader>f  <Plug>(coc-format-selected)
+  nmap <leader>f  <Plug>(coc-format-selected)
 
-nmap <silent> <leader>A <Plug>(coc-diagnostic-prev)
-nmap <silent> <leader>a <Plug>(coc-diagnostic-next)
+  nmap <silent> <leader>A <Plug>(coc-diagnostic-prev)
+  nmap <silent> <leader>a <Plug>(coc-diagnostic-next)
 
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
+  xmap <leader>f  <Plug>(coc-format-selected)
+  nmap <leader>f  <Plug>(coc-format-selected)
 
-highlight CocWarningHighlight cterm=underline,bold,italic ctermfg=Yellow
-highlight CocErrorHighlight cterm=underline,bold,italic ctermfg=Red
-highlight CocInfoHighlight cterm=underline,bold,italic ctermfg=130
+  highlight CocWarningHighlight cterm=underline,bold,italic ctermfg=Yellow
+  highlight CocErrorHighlight cterm=underline,bold,italic ctermfg=Red
+  highlight CocInfoHighlight cterm=underline,bold,italic ctermfg=130
 
-command! -nargs=0 Prettier :CocCommand prettier.formatFile
+  command! -nargs=0 Prettier :CocCommand prettier.formatFile
 
-autocmd CursorHold * silent call CocActionAsync('highlight')
-nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
-command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+  autocmd CursorHold * silent call CocActionAsync('highlight')
+  nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+  command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
 
-let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
 
+  autocmd BufNewFile,BufRead *.razor call TextEnableCodeSnip('cs', '@code {', '\n}', 'SpecialComment')
+endfun
+
+" Enables vaguely correct syntax highlighting for razor files
 function! TextEnableCodeSnip(filetype,start,end,textSnipHl) abort
   let ft=toupper(a:filetype)
   let group='textGroup'.ft
@@ -664,10 +665,14 @@ function! TextEnableCodeSnip(filetype,start,end,textSnipHl) abort
     unlet b:current_syntax
   endif
   execute 'syntax region textSnip'.ft.'
-  \ matchgroup='.a:textSnipHl.'
-  \ keepend
-  \ start="'.a:start.'" end="'.a:end.'"
-  \ contains=@'.group
+        \ matchgroup='.a:textSnipHl.'
+        \ keepend
+        \ start="'.a:start.'" end="'.a:end.'"
+        \ contains=@'.group
 endfunction
 
-autocmd BufNewFile,BufRead *.razor call TextEnableCodeSnip('cs', '@code {', '\n}', 'SpecialComment')
+
+""""""""""""
+" hexokinase
+""""""""""""
+let g:Hexokinase_highlighters = ['sign_column']
