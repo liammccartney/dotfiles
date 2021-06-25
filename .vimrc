@@ -34,6 +34,8 @@ call plug#begin('~/.vim/plugged')
   " file finder, buffer manager
   Plug '/usr/local/opt/fzf'
   Plug 'junegunn/fzf.vim'
+  Plug 'yegappan/mru'
+  Plug 'pbogut/fzf-mru.vim'
 
   " Extends % to match many more kinds of surrounding symbols
   Plug 'tmhedberg/matchit'
@@ -69,6 +71,9 @@ call plug#begin('~/.vim/plugged')
 
   " Autocomplete
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+
+  Plug 'vimwiki/vimwiki'
 call plug#end()
 
 """""""""""""""""""""""""""""
@@ -205,6 +210,7 @@ augroup vimrcEx
   autocmd FileType typescriptreact set sw=4 sts=4 et
   autocmd FileType htmldjango set sw=4 sts=4 et
   autocmd FileType cs set sw=4 sts=4 et
+  autocmd FileType scss set sw=2 sts=2 et
 
   " autocmd BufReadPost public/modules/*/js/*.js :ALEDisable<cr>
 
@@ -464,6 +470,8 @@ command! OpenChangedFiles :call OpenChangedFiles()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 nmap <c-f> :FZF<CR>
 nmap <c-b> :Buffers<CR>
+nnoremap  <silent> <leader>g :FZFMru<CR>
+nnoremap <silent> <Leader>ag :Ag <C-R><C-W><CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " CleanExtraSpaces
@@ -476,7 +484,7 @@ fun! CleanExtraSpaces()
   call setreg('/', old_query)
 endfun
 
-autocmd BufWritePre *.php,*.phtml,*.ctp,*.txt,*.js,*.py,*.wiki,*.sh,*.coffee,*.rkt,*.ex,*.exs,*.rb,*.erl,*.md,*.leex,*.eex,*.razor,*.cs,*.ts,*.html :call CleanExtraSpaces()
+autocmd BufWritePre *.php,*.phtml,*.ctp,*.txt,*.js,*.py,*.wiki,*.sh,*.coffee,*.rkt,*.ex,*.exs,*.rb,*.erl,*.md,*.leex,*.eex,*.razor,*.cs,*.ts,*.html,*.elm :call CleanExtraSpaces()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PHP CS Config
@@ -520,7 +528,7 @@ inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 """""
 " OmniSharp
 """"""
-let g:OmniSharp_selector_ui = 'ctrlp'
+let g:OmniSharp_selector_ui = 'fzf'
 
 " Popup configuration
 let g:OmniSharp_popup_position = 'peek'
@@ -548,8 +556,18 @@ let g:ale_linters = {
       \ 'cs': ['OmniSharp'],
       \ 'typescript': [],
       \ 'python': [],
-      \ 'terraform': []
+      \ 'terraform': [],
+      \ 'go': [],
+      \ 'elm': ['make'],
       \}
+
+let g:ale_fixers = {
+      \ 'elm': ['elm-format'],
+      \}
+
+let g:ale_fix_on_save = 1
+
+
 autocmd FileType cs nmap <silent> <leader>a  <Plug>(ale_next_wrap_error)
 autocmd FileType cs nmap <silent> <leader>A  <Plug>(ale_previous_wrap_error)
 
@@ -576,10 +594,18 @@ set signcolumn=yes
 
 augroup coc
   autocmd FileType typescript call ConfigureCoc()
+  autocmd FileType javascript call ConfigureCoc()
+  autocmd FileType json call ConfigureCoc()
   autocmd FileType html call ConfigureCoc()
   autocmd FileType python call ConfigureCoc()
   autocmd FileType terraform call ConfigureCoc()
+  autocmd FileType go call ConfigureCoc()
+  autocmd FileType vim call ConfigureCoc()
+  autocmd FileType css call ConfigureCoc()
+  autocmd FileType scss call ConfigureCoc()
 augroup END
+
+autocmd FileType scss setl iskeyword+=@-@
 
 fun! ConfigureCoc()
   inoremap <silent><expr> <TAB>
@@ -624,9 +650,6 @@ fun! ConfigureCoc()
 
   nmap <silent> <leader>A <Plug>(coc-diagnostic-prev)
   nmap <silent> <leader>a <Plug>(coc-diagnostic-next)
-
-  xmap <leader>f  <Plug>(coc-format-selected)
-  nmap <leader>f  <Plug>(coc-format-selected)
 
   highlight CocWarningHighlight cterm=underline,bold,italic ctermfg=Yellow
   highlight CocErrorHighlight cterm=underline,bold,italic ctermfg=Red
