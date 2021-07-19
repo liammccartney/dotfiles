@@ -559,10 +559,12 @@ let g:ale_linters = {
       \ 'terraform': [],
       \ 'go': [],
       \ 'elm': ['make'],
+      \ 'elixir': [],
       \}
 
 let g:ale_fixers = {
       \ 'elm': ['elm-format'],
+      \ 'elixir': [],
       \}
 
 let g:ale_fix_on_save = 1
@@ -603,6 +605,8 @@ augroup coc
   autocmd FileType vim call ConfigureCoc()
   autocmd FileType css call ConfigureCoc()
   autocmd FileType scss call ConfigureCoc()
+  autocmd FileType elixir call ConfigureCoc()
+  autocmd FileType sql call ConfigureCoc()
 augroup END
 
 autocmd FileType scss setl iskeyword+=@-@
