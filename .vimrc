@@ -428,7 +428,7 @@ function! RunTests(filename)
     exec ":racket " . a:filename
   elseif filereadable("mix.exs")
     exec ":!mix test " . a:filename
-  elseif strlen(glob("*UnitTests/**/*Tests.cs"))
+  elseif strlen(glob("*Tests/**/*Tests.cs"))
     exec ":OmniSharpRunTestsInFile"
   end
 endfunction
