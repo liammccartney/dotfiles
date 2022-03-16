@@ -72,6 +72,9 @@ call plug#begin('~/.vim/plugged')
   " Autocomplete
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
+  " Svelte
+  Plug 'leafOfTree/vim-svelte-plugin'
+
 
   Plug 'vimwiki/vimwiki'
 call plug#end()
@@ -211,6 +214,7 @@ augroup vimrcEx
   autocmd FileType htmldjango set sw=4 sts=4 et
   autocmd FileType cs set sw=4 sts=4 et
   autocmd FileType scss set sw=2 sts=2 et
+  autocmd FileType svelte set sw=2 sts=2 et
 
   " autocmd BufReadPost public/modules/*/js/*.js :ALEDisable<cr>
 
@@ -430,6 +434,8 @@ function! RunTests(filename)
     exec ":!mix test " . a:filename
   elseif strlen(glob("*Tests/**/*Tests.cs"))
     exec ":OmniSharpRunTestsInFile"
+  elseif strlen(glob("*/**/*.spec.ts"))
+    exec ":!npm test --testFile " . a:filename
   end
 endfunction
 
@@ -554,12 +560,15 @@ let g:OmniSharp_highlight_groups = {
 """""""
 let g:ale_linters = {
       \ 'cs': ['OmniSharp'],
+      \ 'ocaml': [],
+      \ 'java': [],
       \ 'typescript': [],
       \ 'python': [],
       \ 'terraform': [],
       \ 'go': [],
       \ 'elm': ['make'],
       \ 'elixir': [],
+      \ 'cpp': [],
       \}
 
 let g:ale_fixers = {
@@ -595,6 +604,7 @@ set shortmess+=c
 set signcolumn=yes
 
 augroup coc
+  autocmd FileType svelte call ConfigureCoc()
   autocmd FileType typescript call ConfigureCoc()
   autocmd FileType javascript call ConfigureCoc()
   autocmd FileType json call ConfigureCoc()
@@ -607,6 +617,9 @@ augroup coc
   autocmd FileType scss call ConfigureCoc()
   autocmd FileType elixir call ConfigureCoc()
   autocmd FileType sql call ConfigureCoc()
+  autocmd FileType cpp call ConfigureCoc()
+  autocmd FileType java call ConfigureCoc()
+  autocmd FileType ocaml call ConfigureCoc()
 augroup END
 
 autocmd FileType scss setl iskeyword+=@-@
@@ -659,7 +672,7 @@ fun! ConfigureCoc()
   highlight CocErrorHighlight cterm=underline,bold,italic ctermfg=Red
   highlight CocInfoHighlight cterm=underline,bold,italic ctermfg=130
 
-  command! -nargs=0 Prettier :CocCommand prettier.formatFile
+  command! -nargs=0 Format :call CocAction('format')
 
   autocmd CursorHold * silent call CocActionAsync('highlight')
   nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
@@ -703,3 +716,8 @@ endfunction
 " hexokinase
 """"""""""""
 let g:Hexokinase_highlighters = ['sign_column']
+
+set rtp^="/Users/liam/.opam/default/share/ocp-indent/vim"
+
+let g:vim_svelte_plugin_load_full_syntax = 1
+let g:vim_svelte_plugin_use_typescript = 1
