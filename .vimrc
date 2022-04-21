@@ -560,6 +560,7 @@ let g:OmniSharp_highlight_groups = {
 """""""
 let g:ale_linters = {
       \ 'cs': ['OmniSharp'],
+      \ 'vue': [],
       \ 'ocaml': [],
       \ 'java': [],
       \ 'typescript': [],
@@ -604,6 +605,7 @@ set shortmess+=c
 set signcolumn=yes
 
 augroup coc
+  autocmd FileType vue call ConfigureCoc()
   autocmd FileType svelte call ConfigureCoc()
   autocmd FileType typescript call ConfigureCoc()
   autocmd FileType javascript call ConfigureCoc()
