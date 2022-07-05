@@ -582,6 +582,7 @@ let g:ale_fix_on_save = 1
 
 autocmd FileType cs nmap <silent> <leader>a  <Plug>(ale_next_wrap_error)
 autocmd FileType cs nmap <silent> <leader>A  <Plug>(ale_previous_wrap_error)
+autocmd FileType cs nmap <silent> <buffer> <Leader>= <Plug>(omnisharp_code_format)
 
 highlight ALEWarning cterm=underline,bold,italic ctermfg=Yellow
 highlight ALEError cterm=underline,bold,italic ctermfg=Red
