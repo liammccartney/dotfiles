@@ -52,7 +52,6 @@ o.cc = 79
 -- Bindings?
 g.mapleader = ','
 
-
 local function map(m, k, v)
   vim.keymap.set(m, k, v, { silent = true })
 end
@@ -64,7 +63,6 @@ map('n', '<c-h>', '<c-w>h')
 map('n', '<c-l>', '<c-w>l')
 
 map('n', '<leader>w', ':up<CR>')
--- Write All Command No Working
 map('n', '<leader>W', ':wa!<CR>')
 
 map('n', '<leader><leader>', '<c-^>')
@@ -82,14 +80,10 @@ map('n', '<Right>', ':bnext<CR>')
 map('n', '<leader>nn', ':NERDTreeToggle<CR>')
 
 -- COC
-
 o.backup = false
 o.writebackup = false
 
 vim.cmd([[
-" Use tab for trigger completion with characters ahead and navigate.
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
 inoremap <silent><expr> <TAB>
       \ coc#pum#visible() ? coc#pum#next(1):
       \ CheckBackspace() ? "\<Tab>" :
@@ -160,9 +154,6 @@ nmap <leader>caa  <Plug>(coc-codeaction-selected)
 nmap <leader>ca  <Plug>(coc-codeaction)
 " Apply AutoFix to problem on the current line.
 nmap <leader>qf  <Plug>(coc-fix-current)
-
-" Run the Code Lens action on the current line.
-nmap <leader>cl  <Plug>(coc-codelens-action)
 
 " Map function and class text objects
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
@@ -264,6 +255,7 @@ require('packer').startup(function(use)
     requires = { {'nvim-lua/plenary.nvim'} }
   }
   use 'tpope/vim-fugitive'
+  use 'tpope/vim-commentary'
 end)
 
 map('n', '<C-f>', '<cmd>Telescope find_files<cr>')
@@ -273,5 +265,24 @@ map('n', '<leader>g', '<cmd>Telescope live_grep<cr>')
 require('lualine').setup {
   options = {
     theme = 'nord'
+  }
+}
+
+local actions = require('telescope.actions')
+require('telescope').setup {
+  defaults = {
+    mappings = {
+      i = {
+        ["<C-j>"] = {
+          actions.move_selection_next, type = "action",
+          opts = { nowait = true, silent = true }
+        },
+        ["<C-k>"] = {
+          actions.move_selection_previous, type = "action",
+          opts = { nowait = true, silent = true }
+        },
+        ["<ESC>"] = actions.close
+      }
+    }
   }
 }
