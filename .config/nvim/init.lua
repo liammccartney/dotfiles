@@ -81,6 +81,8 @@ map('n', '<Left>', ':bprev<CR>')
 map('n', '<Right>', ':bnext<CR>')
 
 map('n', '<leader>nn', ':NERDTreeToggle<CR>')
+map('n', '<leader>nm', ':NERDTreeFind<CR>')
+g.NERDTreeWinPos = "right"
 
 -- COC
 o.backup = false
