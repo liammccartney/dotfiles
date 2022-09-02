@@ -62,6 +62,9 @@ map('n', '<c-k>', '<c-w>k')
 map('n', '<c-h>', '<c-w>h')
 map('n', '<c-l>', '<c-w>l')
 
+map('n', 'n', 'nzz');
+map('n', 'N', 'Nzz');
+
 map('n', '<leader>w', ':up<CR>')
 map('n', '<leader>W', ':wa!<CR>')
 
