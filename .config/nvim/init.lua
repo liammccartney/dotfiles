@@ -5,6 +5,7 @@ local A = vim.api
 
 -- Colors
 o.termguicolors = true
+vim.cmd("colorscheme nordfox")
 
 -- Fix slow inserts
 o.timeout = 1000
@@ -305,18 +306,7 @@ require('packer').startup(function(use)
   use {'neoclide/coc.nvim', branch = 'release'}
 
   use 'scrooloose/nerdtree'
-  use {
-    'andersevenrud/nordic.nvim',
-    config = function()
-      require('nordic').colorscheme({
-        underline_option = 'undercurl',
-        italic = true,
-        italic_comments = true,
-        minimal_mode = false,
-        alternate_backgrounds = true,
-      })
-    end
-  }
+  use "EdenEast/nightfox.nvim"
 
   use {
     'nvim-lualine/lualine.nvim',
@@ -341,11 +331,7 @@ map('n', '<C-f>', '<cmd>Telescope find_files<cr>')
 map('n', '<C-b>', '<cmd>Telescope buffers<cr>')
 map('n', '<leader>g', '<cmd>Telescope live_grep<cr>')
 
-require('lualine').setup {
-  options = {
-    theme = 'nord'
-  }
-}
+require('lualine').setup()
 
 local actions = require('telescope.actions')
 require('telescope').setup {
