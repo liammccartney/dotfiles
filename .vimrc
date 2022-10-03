@@ -54,18 +54,9 @@ call plug#begin('~/.vim/plugged')
   " Configure this to use `ag`
   Plug 'mileszs/ack.vim'
   
-  " Syntax
-  " Plug 'elixir-editors/vim-elixir'
-  " Plug 'cespare/vim-toml'
-  " Plug 'ElmCast/elm-vim'
-  " Plug 'leafgarland/typescript-vim'
-  " Plug 'jlcrochet/vim-razor'
-
   " Language specifc semantics
-  " Plug 'Quramy/tsuquyomi'
   Plug 'OmniSharp/omnisharp-vim'
   Plug 'nickspoons/vim-sharpenup'
-  " Plug 'dart-lang/dart-vim-plugin'
 
   Plug 'RRethy/vim-hexokinase', { 'do': 'make hexokinase' }
 
@@ -74,9 +65,6 @@ call plug#begin('~/.vim/plugged')
 
   " Svelte
   Plug 'leafOfTree/vim-svelte-plugin'
-
-
-  Plug 'vimwiki/vimwiki'
 call plug#end()
 
 """""""""""""""""""""""""""""
@@ -283,8 +271,6 @@ nnoremap <c-l> <c-w>l
 " Can't be bothered to understand ESC vs <c-c> in insert mode
 imap <c-c> <esc>
 nnoremap <leader><leader> <c-^>
-" Align selected lines
-vnoremap <leader>ib :!align<cr>
 nnoremap <leader>w :w!<cr>
 nnoremap <leader>W :wall!<cr>
 
@@ -299,7 +285,6 @@ map <Up> <C-o>
 map <Down> <C-i>
 noremap <Left> :bprev<cr>
 noremap <Right> :bnext<cr>
-nnoremap <leader>l :ls<cr>:b<space>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " NERDTree Confg
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -524,10 +509,6 @@ endif
 "
 let g:sharpenup_map_prefix = '\'
 
-"""""
-" Deoplete
-"""""
-let g:deoplete#enable_at_startup = 1
 " <TAB>: completion.
 inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 
@@ -629,20 +610,20 @@ autocmd FileType scss setl iskeyword+=@-@
 
 fun! ConfigureCoc()
   inoremap <silent><expr> <TAB>
-        \ pumvisible() ? "\<C-n>" :
-        \ <SID>check_back_space() ? "\<TAB>" :
+        \ coc#pum#visible() ? coc#pum#next(1):
+        \ CheckBackspace() ? "\<Tab>" :
         \ coc#refresh()
-  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+  inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
-  function! s:check_back_space() abort
+  " Make <CR> to accept selected completion item or notify coc.nvim to format
+  " <C-g>u breaks current undo, please make your own choice.
+  inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+        \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+  function! CheckBackspace() abort
     let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~# '\s'
   endfunction
-
-  inoremap <silent><expr> <c-@> coc#refresh()
-
-  inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-        \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
   nmap <leader>ca  <Plug>(coc-codeaction)
   nmap <leader>qf  <Plug>(coc-fix-current)
