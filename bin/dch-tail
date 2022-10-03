@@ -1,3 +1,0 @@
-#! /bin/bash
-
-docker exec -it coursehorse-web tail -f /var/log/coursehorse/application.log

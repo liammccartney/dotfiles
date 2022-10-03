@@ -1,3 +1,0 @@
-#! /bin/bash
-
-docker exec -d coursehorse-web sh -c 'rm /tmp/zend_cache*'

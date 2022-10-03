@@ -1,5 +1,0 @@
-#! /bin/bash
-
-sectionStatus=$1
-
-docker exec -it coursehorse-web sh -c "php scripts/util/reindex-sections.php $sectionStatus"

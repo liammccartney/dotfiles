@@ -1,6 +1,0 @@
-#! /bin/bash
-
-script=$1
-cmd="php scripts/util/$script"
-
-docker exec -it coursehorse-web sh -c "$cmd"
