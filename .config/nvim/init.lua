@@ -253,17 +253,31 @@ require('packer').startup(function(use)
   use 'tpope/vim-fugitive'
   use 'tpope/vim-commentary'
   use 'rcarriga/nvim-notify'
+  use 'vim-test/vim-test'
 end)
 
 map('n', '<C-f>', '<cmd>Telescope find_files<cr>')
 map('n', '<C-b>', '<cmd>Telescope buffers<cr>')
 map('n', '<leader>g', '<cmd>Telescope live_grep<cr>')
 
+map('n', '<leader>t', ':TestNearest<cr>')
+map('n', '<leader>T', ':TestFile<cr>')
+map('n', '<leader>tl', ':TestLast<cr>')
+
+vim.cmd([[
+let g:test#javascript#runner = 'jest'
+" make test commands execute using dispatch.vim
+let test#strategy = "neovim"
+]])
+
 require('lualine').setup()
 
 local actions = require('telescope.actions')
 require('telescope').setup {
   defaults = {
+      layout_config = {
+        preview_width = 0.75
+      },
     mappings = {
       i = {
         ["<C-j>"] = {
