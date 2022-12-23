@@ -11,6 +11,9 @@ local on_attach = function(_, _)
 	vim.keymap.set('n', 'gr', require('telescope.builtin').lsp_references, {})
 	vim.keymap.set('n', 'K', vim.lsp.buf.hover, {})
 	vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, {})
+
+  vim.keymap.set('n', '<leader>a', vim.diagnostic.goto_next, {})
+  vim.keymap.set('n', '<leader>A', vim.diagnostic.goto_prev, {})
 end
 
 require("lspconfig").sumneko_lua.setup {
@@ -22,4 +25,17 @@ require("lspconfig").sumneko_lua.setup {
 			}
 		}
 	}
+}
+
+require("lspconfig").omnisharp.setup {
+  on_attach = on_attach
+}
+
+require("lspconfig").tsserver.setup {
+  on_attach = on_attach
+}
+
+require("lspconfig").angularls.setup {
+  on_attach = on_attach,
+  root_dir = require('lspconfig').util.root_pattern("package.json", "tsconfig.base.json")
 }
