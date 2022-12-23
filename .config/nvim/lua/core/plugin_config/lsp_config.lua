@@ -14,5 +14,12 @@ local on_attach = function(_, _)
 end
 
 require("lspconfig").sumneko_lua.setup {
-	on_attach = on_attach
+	on_attach = on_attach,
+	settings = {
+		Lua = {
+			diagnostics = {
+				globals = { 'vim' }
+			}
+		}
+	}
 }
