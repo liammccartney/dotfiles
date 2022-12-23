@@ -1,7 +1,11 @@
-local g = vim.g
-local o = vim.o
-local opt = vim.opt
-local A = vim.api
+require("core.keymaps");
+require("core.plugins");
+require("core.plugin_config");
+
+-- local g = vim.g
+-- local o = vim.o
+-- local opt = vim.opt
+-- local A = vim.api
 
 -- -- Colors
 -- o.termguicolors = true
