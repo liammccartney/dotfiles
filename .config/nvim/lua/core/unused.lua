@@ -1,0 +1,36 @@
+-- -- Fix slow inserts
+-- o.timeout = 1000
+-- o.timeoutlen = 1000
+-- o.ttimeoutlen = 100
+-- o.updatetime = 300
+--
+-- -- Editor Experience
+-- o.hidden = true
+-- o.history = 10000
+-- o.foldmethod = 'manual'
+-- o.foldenable = false
+-- o.joinspaces = false
+-- o.incsearch = true
+-- o.hlsearch = true
+--
+-- o.cmdheight = 1
+-- o.switchbuf = 'useopen'
+-- o.cursorline = true
+--
+-- -- Make neovim & OS Clipboard work together
+-- o.clipboard = 'unnamedplus'
+--
+-- -- Context
+-- o.laststatus = 2
+-- o.showtabline = 2
+-- o.winwidth = 79
+--
+-- Vim Test
+-- map('n', '<leader>t', ':TestNearest<cr>')
+-- map('n', '<leader>T', ':TestFile<cr>')
+-- map('n', '<leader>tl', ':TestLast<cr>')
+-- -- vim.cmd([[
+-- -- let g:test#javascript#runner = 'jest'
+-- -- " make test commands execute using dispatch.vim
+-- -- let test#strategy = "neovim"
+-- -- ]])
