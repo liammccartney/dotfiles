@@ -12,31 +12,29 @@ map('n', '<c-k>', '<c-w>k')
 map('n', '<c-h>', '<c-w>h')
 map('n', '<c-l>', '<c-w>l')
 
+-- Snap search results to middle of page
 map('n', 'n', 'nzz');
 map('n', 'N', 'Nzz');
 
+-- Save files
 map('n', '<leader>w', ':up<CR>')
 map('n', '<leader>W', ':wa!<CR>')
 
+-- Toggle between buffers
 map('n', '<leader><leader>', '<c-^>')
 
+-- Split vertically quickly
 map('n', '<leader>vs', ':vsplit<CR>')
 
+-- Clear search highlights
 map('n', '<leader><CR>', ':noh<CR>')
+
+-- Close all open location lists, or w/e they're called
+-- that get opend by other plugins
 map('n', '<leader>cc', ':cclose<cr> :pclose<cr> :lclose<cr>')
 
+-- Make split navigation easy
 map('n', '<UP>', '<C-o>')
 map('n', '<Down>', '<C-i>')
 map('n', '<Left>', ':bprev<CR>')
 map('n', '<Right>', ':bnext<CR>')
-
-map('n', '<leader>nn', ':NERDTreeToggle<CR>')
-map('n', '<leader>nm', ':NERDTreeFind<CR>')
-
-map('n', '<C-f>', '<cmd>Telescope find_files<cr>')
-map('n', '<C-b>', '<cmd>Telescope buffers<cr>')
-map('n', '<leader>g', '<cmd>Telescope live_grep<cr>')
-
-map('n', '<leader>t', ':TestNearest<cr>')
-map('n', '<leader>T', ':TestFile<cr>')
-map('n', '<leader>tl', ':TestLast<cr>')

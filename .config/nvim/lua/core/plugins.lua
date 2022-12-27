@@ -12,28 +12,39 @@ end
 local packer_bootstrap = ensure_packer()
 
 return require('packer').startup(function(use)
+  -- Package Manager
   use 'wbthomason/packer.nvim'
+  -- Colorscheme(s)
   use 'EdenEast/nightfox.nvim'
+  -- File Tree Navigator
   use 'nvim-tree/nvim-tree.lua'
+  -- Nice Icons for File Tree
   use 'nvim-tree/nvim-web-devicons'
+  -- Nicer Status Line
   use 'nvim-lualine/lualine.nvim'
+  -- Syntax Highlighting and other semantic awareness for neovim
   use 'nvim-treesitter/nvim-treesitter'
+  -- Fuzzy Finder for all the things
   use {
     'nvim-telescope/telescope.nvim', tag = '0.1.0',
     requires = { { 'nvim-lua/plenary.nvim' } }
   }
 
+  -- Sort of a package manager for Language Servers that integrates
+  -- into neovim's lsp feature
   use {
     "williamboman/mason.nvim",
     "williamboman/mason-lspconfig.nvim",
     "neovim/nvim-lspconfig",
   }
+  -- Use telescope for lsp Code Actions
+  use 'nvim-telescope/telescope-ui-select.nvim'
 
+  -- Autocompletion
+  --   Note: I don't understand why I need three packages here yet
   use 'hrsh7th/nvim-cmp'
   use 'hrsh7th/cmp-nvim-lsp'
   use "L3MON4D3/LuaSnip"
-
-  use 'nvim-telescope/telescope-ui-select.nvim'
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
