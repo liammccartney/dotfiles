@@ -38,3 +38,5 @@ map('n', '<UP>', '<C-o>')
 map('n', '<Down>', '<C-i>')
 map('n', '<Left>', ':bprev<CR>')
 map('n', '<Right>', ':bnext<CR>')
+
+map('n', '<leader>rr', ':so ~/.config/nvim/init.lua<cr>')

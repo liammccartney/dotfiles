@@ -37,6 +37,8 @@ return require('packer').startup(function(use)
     "williamboman/mason-lspconfig.nvim",
     "neovim/nvim-lspconfig",
   }
+  -- Report LSP start up progress
+  use 'arkav/lualine-lsp-progress'
   -- Use telescope for lsp Code Actions
   use 'nvim-telescope/telescope-ui-select.nvim'
 
@@ -45,6 +47,15 @@ return require('packer').startup(function(use)
   use 'hrsh7th/nvim-cmp'
   use 'hrsh7th/cmp-nvim-lsp'
   use "L3MON4D3/LuaSnip"
+
+  -- Comment Toggler
+  use 'numToStr/Comment.nvim'
+
+  -- Formatting (LSP Formatter doesn't use prettier in TS/HTML/CSS land)
+  use 'sbdchd/neoformat'
+
+  -- Git, in vim!
+  use 'tpope/vim-fugitive'
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins

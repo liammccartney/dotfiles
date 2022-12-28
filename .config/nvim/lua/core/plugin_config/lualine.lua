@@ -8,6 +8,11 @@ require('lualine').setup {
         'filename',
         path = 1,
       }
+    }, 
+    lualine_c = {
+      {
+        'lsp_progress'
+      }
     }
   }
 }
