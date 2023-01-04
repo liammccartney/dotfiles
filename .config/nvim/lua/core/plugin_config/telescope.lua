@@ -42,7 +42,9 @@ require('telescope').setup {
 
 vim.keymap.set('n', '<c-f>', builtin.find_files, {})
 vim.keymap.set('n', '<c-b>', builtin.buffers, {})
+vim.keymap.set('n', '<c-t>', builtin.oldfiles, {})
 vim.keymap.set('n', '<leader>g', builtin.live_grep, {})
+vim.keymap.set('n', '<leader>ss', builtin.lsp_document_symbols, {})
 
 -- To get ui-select loaded and working with telescope, you need to call
 -- load_extension, somewhere after setup function:
