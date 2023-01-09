@@ -1,9 +1,12 @@
 require("mason").setup()
-require("mason-lspconfig").setup({
-  ensure_installed = { "sumneko_lua" }
-})
+require("mason-lspconfig").setup()
 
-local on_attach = function(client, _)
+local navic = require("nvim-navic")
+
+local on_attach = function(client, bufnr)
+  if client.server_capabilities.documentSymbolProvider then
+    navic.attach(client, bufnr)
+  end
   vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, {})
   vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, {})
   vim.keymap.set('n', 'gd', vim.lsp.buf.definition, {})

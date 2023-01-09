@@ -41,6 +41,11 @@ return require('packer').startup(function(use)
   use 'arkav/lualine-lsp-progress'
   -- Use telescope for lsp Code Actions
   use 'nvim-telescope/telescope-ui-select.nvim'
+  -- Add Context Line at top of screen
+  use {
+    "SmiteshP/nvim-navic",
+    requires = "neovim/nvim-lspconfig"
+  }
 
   -- Autocompletion
   --   Note: I don't understand why I need three packages here yet
@@ -56,6 +61,30 @@ return require('packer').startup(function(use)
 
   -- Git, in vim!
   use 'tpope/vim-fugitive'
+  use {
+    'lewis6991/gitsigns.nvim',
+  }
+  -- Surround Things
+  use 'tpope/vim-surround'
+
+  -- Probably Going to Remove This
+  use 'dstein64/vim-startuptime'
+  use 'lewis6991/impatient.nvim'
+
+  -- Highlight Hexcodes with their color
+  use 'NvChad/nvim-colorizer.lua'
+
+  -- Welcome Screen
+  use {
+    'goolord/alpha-nvim',
+    requires = { 'nvim-tree/nvim-web-devicons' }
+  }
+
+  use({
+    'noib3/nvim-cokeline',
+    requires = 'kyazdani42/nvim-web-devicons',
+  })
+
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
