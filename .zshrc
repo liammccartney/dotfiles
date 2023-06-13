@@ -157,3 +157,4 @@ load-nvmrc
 
 # Load Angular CLI autocompletion.
 # source <(ng completion script)
+export PATH="/usr/local/opt/postgresql@15/bin:$PATH"
