@@ -46,13 +46,7 @@ require("lspconfig").lua_ls.setup {
   }
 }
 
--- require("lspconfig").omnisharp.setup {
---   on_attach = on_attach,
---   capabilities = capabilities,
--- }
-
 require("lspconfig").omnisharp.setup({
-  -- cmd = { "C:/Users/bakkenl/scoop/shims/OmniSharp.exe", "--languageserver", "--hostPID", tostring(pid) },
   capabilities = capabilities,
   root_dir = require('lspconfig').util.find_git_ancestor,
   on_attach = function (client, bufnr)
@@ -114,11 +108,6 @@ require("lspconfig").clojure_lsp.setup {
   on_attach = on_attach,
   capabilities = capabilities
 }
-
--- require('lspconfig').tailwindcss.setup({
---   on_attach = on_attach,
---   capabilities = capabilities
--- })
 
 require('lspconfig').rust_analyzer.setup({
   on_attach = on_attach,
