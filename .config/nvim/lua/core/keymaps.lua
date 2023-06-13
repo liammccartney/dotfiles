@@ -40,3 +40,8 @@ map('n', '<Left>', ':bprev<CR>')
 map('n', '<Right>', ':bnext<CR>')
 
 map('n', '<leader>rr', ':so ~/.config/nvim/init.lua<cr>')
+
+map('n', '<leader>e', ':e! ~/.config/nvim/init.lua<cr>')
+map('n', '<leader>y', '"*y')
+
+-- map('n', '<leader>y', '')

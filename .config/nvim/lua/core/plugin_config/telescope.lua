@@ -13,7 +13,8 @@ require('telescope').setup {
           actions.move_selection_previous, type = "action",
           opts = { nowait = true, silent = true }
         },
-        ["<ESC>"] = actions.close
+        ["<ESC>"] = actions.close,
+        ['<c-d>'] = actions.delete_buffer
       }
     }
   },
