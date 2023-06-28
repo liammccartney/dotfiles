@@ -1,4 +1,3 @@
---
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 
 -- auto install lazy.nvim if not present
@@ -18,8 +17,18 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
-  { "folke/neodev.nvim",    opts = {} },
-  { 'folke/tokyonight.nvim' },
+  {
+    "folke/neodev.nvim",
+    opts = {}
+  },
+  {
+    'EdenEast/nightfox.nvim',
+    lazy = false,
+    priority = 1000,
+    config = function()
+      vim.cmd.colorscheme('duskfox')
+    end
+  },
   {
     'VonHeikemen/lsp-zero.nvim',
     branch = 'v2.x',
@@ -40,7 +49,10 @@ require('lazy').setup({
       { 'L3MON4D3/LuaSnip' },
     }
   },
-  { "folke/neodev.nvim",               opts = {} },
+  {
+    "folke/neodev.nvim",
+    opts = {}
+  },
   { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
   {
     'nvim-telescope/telescope.nvim',
@@ -59,13 +71,18 @@ require('lazy').setup({
     config = function()
       require("nvim-tree").setup {}
     end,
+  },
+  { 'onsails/lspkind.nvim' },
+  {
+    "numToStr/Comment.nvim",
+    config = function()
+      require('Comment').setup()
+    end
   }
 })
 
-vim.opt.termguicolors = true
-vim.cmd.colorscheme('tokyonight')
-
 require("plugins.lsp")
+require("plugins.cmp")
 require("plugins.telescope")
 require("plugins.treesitter")
 require("plugins.nvim-tree")

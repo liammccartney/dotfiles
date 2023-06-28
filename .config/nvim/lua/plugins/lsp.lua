@@ -11,8 +11,12 @@ lsp.ensure_installed({
 
 local on_attach = function(_, bufnr)
   lsp.default_keymaps({ buffer = bufnr })
+  local opts = { buffer = bufnr }
 
   vim.keymap.set('n', 'gr', require('telescope.builtin').lsp_references, { buffer = true })
+  vim.keymap.set({ 'n', 'x' }, '<leader>f', function()
+    vim.lsp.buf.format({ async = false, timeout_ms = 10000 })
+  end, opts)
 end
 
 lsp.on_attach(on_attach)
