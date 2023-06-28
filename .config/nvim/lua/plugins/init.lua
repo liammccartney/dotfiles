@@ -78,7 +78,11 @@ require('lazy').setup({
     config = function()
       require('Comment').setup()
     end
-  }
+  },
+  { 'tpope/vim-fugitive' },
+  { 'tpope/vim-abolish' },
+  { 'tpope/vim-surround' },
+  { 'lewis6991/gitsigns.nvim' }
 })
 
 require("plugins.lsp")
