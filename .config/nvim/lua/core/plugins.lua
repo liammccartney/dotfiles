@@ -75,6 +75,9 @@ return require('packer').startup(function(use)
   -- Surround Things
   use 'tpope/vim-surround'
 
+  -- neodev -> improve lua ls for neovim config work
+  use { "folke/neodev.nvim", opts = {} }
+
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if packer_bootstrap then
