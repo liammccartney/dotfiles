@@ -104,6 +104,7 @@ alias gb="git branch"
 alias vim="nvim"
 alias vi="nvim"
 alias v="nvim"
+alias cat="bat"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -122,8 +123,6 @@ export PYENV_ROOT="$HOME/.pyenv"
 command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 eval "$(zoxide init zsh)"
-
-. /usr/local/opt/asdf/libexec/asdf.sh
 
 # opam configuration
 [[ ! -r /Users/liam/.opam/opam-init/init.zsh ]] || source /Users/liam/.opam/opam-init/init.zsh  > /dev/null 2> /dev/null
