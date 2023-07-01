@@ -6,7 +6,8 @@ lsp.ensure_installed({
   'angularls',
   'html',
   'jsonls',
-  'omnisharp'
+  'omnisharp',
+  'elixirls'
 })
 
 local on_attach = function(_, bufnr)
