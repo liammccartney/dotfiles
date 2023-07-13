@@ -87,6 +87,7 @@
   email = liam.mccartney@gmail.com
 [push]
   default = simple
+	autoSetupRemote = true
 [diff]
   tool = vimdiff
 [init]
