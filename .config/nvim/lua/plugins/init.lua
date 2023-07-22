@@ -82,7 +82,7 @@ require('lazy').setup({
   { 'tpope/vim-fugitive' },
   { 'tpope/vim-abolish' },
   { 'tpope/vim-surround' },
-  { 'lewis6991/gitsigns.nvim' }
+  { 'lewis6991/gitsigns.nvim' },
 })
 
 require("plugins.lsp")
