@@ -45,3 +45,4 @@ add-zsh-hook chpwd load-nvmrc
 load-nvmrc
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
+export PATH="/Users/liam/Library/Python/3.11/bin/:$PATH"
