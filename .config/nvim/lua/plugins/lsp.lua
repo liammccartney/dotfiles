@@ -20,6 +20,7 @@ local on_attach = function(_, bufnr)
   end, opts)
 end
 
+
 lsp.on_attach(on_attach)
 
 lsp.configure('angularls', {
@@ -46,4 +47,27 @@ lsp.configure('omnisharp', {
 
 require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 
+lsp.configure('graphql', {
+  filetypes = { 'graphql', 'typescript' }
+})
+
+lsp.skip_server_setup({'tsserver', 'jsonls'})
+
 lsp.setup()
+
+require('typescript').setup({
+  server = {
+    on_attach = function (_, bufnr)
+      vim.keymap.set('n', '<leader>ci', '<cmd>TypescriptAddMissingImports<cr>', {buffer = bufnr})
+      vim.keymap.set('n', '<leader>or', '<cmd>TypescriptOrganizeImports<cr>', {buffer = bufnr})
+      vim.keymap.set('n', '<leader>rr', '<cmd>TypescriptRemoveUnused<cr>', {buffer = bufnr})
+    end
+  }
+})
+
+-- How to do this in LSP Zero?
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+require('lspconfig').jsonls.setup {
+  capabilities = capabilities
+}

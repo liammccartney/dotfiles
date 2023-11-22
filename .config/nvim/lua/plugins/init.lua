@@ -56,7 +56,7 @@ require('lazy').setup({
   { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
   {
     'nvim-telescope/telescope.nvim',
-    tag = '0.1.1',
+    tag = '0.1.4',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope-ui-select.nvim'
@@ -83,10 +83,40 @@ require('lazy').setup({
   { 'tpope/vim-abolish' },
   { 'tpope/vim-surround' },
   { 'lewis6991/gitsigns.nvim' },
+  {
+    "folke/trouble.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    },
+  },
+  { 'jose-elias-alvarez/typescript.nvim' },
+  {
+    'Wansmer/treesj',
+    keys = { '<space>m', '<space>j', '<space>s' },
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    config = function()
+      require('treesj').setup({ --[[ your config ]] })
+    end,
+  },
+  'ionide/Ionide-vim',
+  'prettier/vim-prettier',
+  {
+    "folke/todo-comments.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    }
+  }
 })
 
 require("plugins.lsp")
 require("plugins.cmp")
 require("plugins.telescope")
+require("plugins.trouble")
 require("plugins.treesitter")
 require("plugins.nvim-tree")
