@@ -46,3 +46,8 @@ load-nvmrc
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
 export PATH="/Users/liam/Library/Python/3.11/bin/:$PATH"
+
+
+# Load Angular CLI autocompletion.
+source <(ng completion script)
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
