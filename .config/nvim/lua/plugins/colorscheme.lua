@@ -1,16 +1,18 @@
 return {
   {
-    "EdenEast/nightfox.nvim",
+    "catppuccin/nvim",
     lazy = false,
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme("duskfox")
+      require("catppuccin").setup({
+        flavour = "mocha",
+      })
     end,
   },
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "duskfox",
+      colorscheme = "catppuccin",
     },
   },
 }
