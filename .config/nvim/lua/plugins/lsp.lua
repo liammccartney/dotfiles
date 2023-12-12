@@ -17,6 +17,7 @@ return {
   opts = {},
   config = function()
     local lsp_zero = require('lsp-zero')
+    local lspconfg = require('lspconfig')
 
     lsp_zero.on_attach(function(client, bufnr)
       lsp_zero.default_keymaps({ buffer = bufnr })
@@ -26,6 +27,20 @@ return {
     require('mason-lspconfig').setup({
       handlers = {
         lsp_zero.default_setup,
+        angularls = function()
+          lspconfg.angularls.setup({
+            root_dir = lspconfg.util.root_pattern("package.json", "tsconfig.base.json"),
+          })
+        end
+      },
+      ensure_installed = {
+        'tsserver',
+        'eslint',
+        'angularls',
+        'html',
+        'jsonls',
+        'omnisharp',
+        'elixirls'
       }
     })
 
