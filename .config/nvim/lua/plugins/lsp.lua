@@ -60,10 +60,9 @@ return {
     config = function()
       local lsp_zero = require('lsp-zero')
       lsp_zero.extend_lspconfig()
-      lsp_zero.on_attach(
-        function(client, bufnr)
-          lsp_zero.default_keymaps({ buffer = bufnr })
-        end)
+      lsp_zero.on_attach(function(client, bufnr)
+        lsp_zero.default_keymaps({ buffer = bufnr, preserve_mappings = false })
+      end)
 
       require('mason-lspconfig').setup({
         ensure_installed = {
@@ -87,10 +86,17 @@ return {
               root_dir = lspconfg.util.root_pattern("package.json", "tsconfig.base.json"),
             })
           end,
-          omnisharp = function ()
+          omnisharp = function()
             local lspconfig = require('lspconfig')
             lspconfig.omnisharp.setup({
               root_dir = lspconfig.util.find_git_ancestor
+            })
+          end,
+          tsserver = function()
+            local lspconfg = require('lspconfig')
+
+            lspconfg.tsserver.setup({
+              root_dir = lspconfg.util.root_pattern("package.json", "tsconfig.base.json"),
             })
           end
         },
