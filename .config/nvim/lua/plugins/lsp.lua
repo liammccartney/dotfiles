@@ -2,15 +2,20 @@ return {
   'VonHeikemen/lsp-zero.nvim',
   branch = 'v3.x',
   dependencies = {
+    -- LSP Support
+    {
+      'neovim/nvim-lspconfig'
+    },
     { 'williamboman/mason.nvim' },
     { 'williamboman/mason-lspconfig.nvim' },
-    { 'neovim/nvim-lspconfig' },
+
+    -- Autocompletion
     { 'hrsh7th/cmp-nvim-lsp' },
     { 'hrsh7th/nvim-cmp' },
     { 'L3MON4D3/LuaSnip' },
     {
       'folke/neodev.nvim',
-      opts = {}
+      config = true
     },
     { 'onsails/lspkind.nvim' },
   },
@@ -48,11 +53,11 @@ return {
     local cmp_action = lsp_zero.cmp_action()
 
     cmp.setup({
-      mapping = {
+      mapping = cmp.mapping.preset.insert({
         ['<Tab>'] = cmp_action.luasnip_supertab(),
         ['<S-Tab>'] = cmp_action.luasnip_shift_supertab(),
         ['<cr>'] = cmp.mapping.confirm({ select = true }),
-      },
+      }),
       window = {
         completion = cmp.config.window.bordered(),
         documentation = cmp.config.window.bordered(),
