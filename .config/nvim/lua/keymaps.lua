@@ -33,13 +33,8 @@ map('n', '<leader><CR>', ':noh<CR>')
 -- that get opend by other plugins
 map('n', '<leader>cc', ':cclose<cr> :pclose<cr> :lclose<cr>')
 
--- Make split navigation easy
+-- Jump list Navigation
 map('n', '<UP>', '<C-o>')
 map('n', '<Down>', '<C-i>')
 map('n', '<Left>', ':bprev<CR>')
 map('n', '<Right>', ':bnext<CR>')
-
-map('n', '<leader>rr', ':so ~/.config/nvim/init.lua<cr>')
-
-map('n', '<leader>e', ':e! ~/.config/nvim/init.lua<cr>')
-map('n', '<leader>y', '"*y')

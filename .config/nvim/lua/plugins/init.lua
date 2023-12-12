@@ -49,10 +49,6 @@ require('lazy').setup({
       { 'L3MON4D3/LuaSnip' },
     }
   },
-  {
-    "folke/neodev.nvim",
-    opts = {}
-  },
   { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
   {
     'nvim-telescope/telescope.nvim',
@@ -111,6 +107,21 @@ require('lazy').setup({
       -- or leave it empty to use the default settings
       -- refer to the configuration section below
     }
+  },
+  {
+    'stevearc/oil.nvim',
+    opts = {},
+    -- Optional dependencies
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+  },
+  {
+    "nvim-neotest/neotest",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-neotest/neotest-vim-test",
+      "Issafalcon/neotest-dotnet",
+      'nvim-neotest/neotest-jest'
+    }
   }
 })
 
@@ -120,3 +131,6 @@ require("plugins.telescope")
 require("plugins.trouble")
 require("plugins.treesitter")
 require("plugins.nvim-tree")
+require("plugins.oil")
+require("plugins.neotest")
+require("plugins.neodev")
