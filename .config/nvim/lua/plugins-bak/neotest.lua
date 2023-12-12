@@ -12,5 +12,5 @@ neotest.setup({
   },
 })
 
-vim.keymap.set('n', '<cr>', neotest.run.run, {})
+vim.keymap.set('n', '<leader>t', neotest.run.run, {})
 vim.keymap.set('n', '<leader>T', function () neotest.run.run(vim.fn.expand("%")) end , {})
