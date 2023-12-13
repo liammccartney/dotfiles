@@ -34,10 +34,6 @@ return {
           ['<S-Tab>'] = cmp_action.luasnip_shift_supertab(),
           ['<cr>'] = cmp.mapping.confirm({ select = true }),
         }),
-        window = {
-          completion = cmp.config.window.bordered(),
-          documentation = cmp.config.window.bordered(),
-        },
         formatting = {
           fields = { 'abbr', 'kind', 'menu' },
           format = require('lspkind').cmp_format({
