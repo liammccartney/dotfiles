@@ -2,7 +2,7 @@
 --  "nvim-treesitter/nvim-treesitter-textobjects",
 
 return {
-  "nvim-treesitter/nvim-treesitter", 
+  "nvim-treesitter/nvim-treesitter",
   build = ":TSUpdate",
   version = false,
   opts = {
@@ -15,4 +15,7 @@ return {
     incremental_selection = { enable = true },
     indent = { enable = true }
   },
+  config = function (_, opts)
+    require('nvim-treesitter.configs').setup(opts)
+  end
 }
