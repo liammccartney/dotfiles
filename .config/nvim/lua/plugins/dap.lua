@@ -8,36 +8,27 @@ return {
     },
     config = function()
       local dap = require('dap')
-      dap.adapters.lldb = {
-        type = 'executable',
-        command = '/usr/bin/lldb',
-        name = 'lldb'
-      }
-
-      local lldb = {
-        name = 'Launch lldb',
-        type = 'lldb',
-        request = 'launch',
-        program = function()
-          return vim.fn.input(
-            'Path to executable:',
-            vim.fn.getcwd() .. '/',
-            'file'
-          )
-        end,
-        cwd = '${workspace_folder}',
-        stopOnEntry = false,
-        args = {},
-        runInTerminal = false,
-      }
-
-      dap.configurations.rust = {
-        lldb
-      }
 
       require('dap-python').setup('~/.virtualenvs/debugpy/bin/python')
 
       require('nvim-dap-virtual-text').setup()
+
+      dap.adapters.coreclr = {
+        type = 'executable',
+        command = '/Users/liam/netcoredbg/netcoredbg',
+        args = { '--interpreter=vscode' }
+      }
+
+      dap.configurations.cs = {
+        {
+          type = 'coreclr',
+          name = 'launch - netcoredbg',
+          request = 'launch',
+          program = function()
+            return vim.fn.input('Path to dll', vim.fn.getcwd() .. '/bin/Debug/', 'file')
+          end
+        }
+      }
 
       local dapui = require("dapui")
 
