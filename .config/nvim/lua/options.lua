@@ -42,3 +42,7 @@ o.switchbuf = 'useopen'
 
 -- Highlight Current Line
 o.cursorline = true
+o.swapfile = false
+o.backup = false
+o.undodir = os.getenv('HOME') .. '/.vim/undodir'
+o.undofile = true
