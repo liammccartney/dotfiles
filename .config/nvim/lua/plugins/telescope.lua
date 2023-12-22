@@ -1,6 +1,5 @@
 return {
   'nvim-telescope/telescope.nvim',
-  cmd = "Telescope",
   version = false,
   dependencies = {
     'nvim-lua/plenary.nvim',
@@ -52,8 +51,6 @@ return {
         }
       }
     })
-
-
 
     require("telescope").load_extension("ui-select")
   end,
