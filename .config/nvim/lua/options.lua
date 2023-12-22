@@ -6,6 +6,7 @@ o.history = 10000
 
 -- Show Line Numbers
 o.number = true
+o.relativenumber = true
 -- Show Signs in the same column as the Numbers
 -- Prevents horizontal janky jumps
 o.signcolumn = 'number'
@@ -42,7 +43,10 @@ o.switchbuf = 'useopen'
 
 -- Highlight Current Line
 o.cursorline = true
+
 o.swapfile = false
 o.backup = false
 o.undodir = os.getenv('HOME') .. '/.vim/undodir'
 o.undofile = true
+
+o.termguicolors = true
