@@ -19,7 +19,7 @@ return {
   },
   keys = {
     { '<c-f>', function() require('telescope.builtin').find_files() end, desc = "Find Files" },
-    { '<c-b>', function() require('telescope.builtin').buffers() end },
+    { '<c-b>', function() require('telescope.builtin').buffers() end, desc = 'Find Open Buffers' },
     desc = "Find Buffers",
     { '<leader>g',  function() require('telescope.builtin').live_grep() end,            desc = "Live Grep" },
     { '<leader>ss', function() require('telescope.builtin').lsp_document_symbols() end, desc = "Go to Symbol" },
