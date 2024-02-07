@@ -1,10 +1,15 @@
-require('nvim-treesitter.configs').setup {
-  ensure_installed = { "lua", "vim", "c_sharp", "typescript" },
-  sync_install = false,
-  auto_install = true,
-  highlight = {
-    enable = true,
-  },
-  incremental_selection = { enable = true },
-  indent = { enable = true }
+-- Maybe Install?
+--  "nvim-treesitter/nvim-treesitter-textobjects",
+return {
+  {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    config = function()
+      require("nvim-treesitter.configs").setup({
+        ensure_installed = { "lua", "vim", "c_sharp", "typescript", "gitcommit", "diff", "git_rebase", "git_config" },
+        highlight = { enable = true },
+        indent = { enable = true },
+      })
+    end
+  }
 }

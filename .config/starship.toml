@@ -1,18 +1,96 @@
-command_timeout = 1000
+"$schema" = 'https://starship.rs/config-schema.json'
 
-[aws]
-disabled = true
+format = """
+[](surface0)\
+$os\
+$username\
+[](bg:peach fg:surface0)\
+$directory\
+[](fg:peach bg:flamingo)\
+$git_branch\
+$git_status\
+[](fg:flamingo bg:teal)\
+$time\
+[ ](fg:teal)\
+$line_break$character"""
 
-[cmd_duration]
-disabled = true
+palette = 'catppuccin_mocha'
 
-[nodejs]
-disabled = true
+[palettes.catppuccin_mocha]
+rosewater = "#f5e0dc"
+flamingo = "#f2cdcd"
+pink = "#f5c2e7"
+orange = "#cba6f7"
+red = "#f38ba8"
+maroon = "#eba0ac"
+peach = "#fab387"
+yellow = "#f9e2af"
+green = "#a6e3a1"
+teal = "#94e2d5"
+sky = "#89dceb"
+sapphire = "#74c7ec"
+blue = "#89b4fa"
+lavender = "#b4befe"
+text = "#cdd6f4"
+subtext1 = "#bac2de"
+subtext0 = "#a6adc8"
+overlay2 = "#9399b2"
+overlay1 = "#7f849c"
+overlay0 = "#6c7086"
+surface2 = "#585b70"
+surface1 = "#45475a"
+surface0 = "#313244"
+base = "#1e1e2e"
+mantle = "#181825"
+crust = "#11111b"
 
-[package]
-disabled = true
+[os]
+disabled = false
+style = "bg:surface0 fg:text"
 
+[os.symbols]
+Macos = "󰀵"
+
+[username]
+show_always = true
+style_user = "bg:surface0 fg:text"
+style_root = "bg:surface0 fg:text"
+format = '[ $user ]($style)'
+
+[directory]
+style = "fg:mantle bg:peach"
+format = "[ $path ]($style)"
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = "󰝚 "
+"Pictures" = " "
+"Developer" = "󰲋 "
 
 [git_branch]
-symbol = "🌱 "
+symbol = ""
+style = "bg:purple"
+format = '[[ $symbol $branch ](fg:base bg:purple)]($style)'
 
+[git_status]
+style = "bg:purple"
+format = '[[($all_status$ahead_behind )](fg:base bg:purple)]($style)'
+
+[time]
+disabled = false
+time_format = "%R"
+style = "bg:teal"
+format = '[[  $time ](fg:mantle bg:teal)]($style)'
+
+[line_break]
+disabled = false
+
+[character]
+disabled = false
+success_symbol = '[](bold fg:green)'
+error_symbol = '[](bold fg:red)'
+vimcmd_symbol = '[](bold fg:creen)'
+vimcmd_replace_one_symbol = '[](bold fg:purple)'
+vimcmd_replace_symbol = '[](bold fg:purple)'
+vimcmd_visual_symbol = '[](bold fg:lavender)'
