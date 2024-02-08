@@ -4,6 +4,7 @@ format = """
 [](surface0)\
 $os\
 $username\
+$jobs\
 [](bg:peach fg:surface0)\
 $directory\
 [](fg:peach bg:flamingo)\
@@ -94,3 +95,7 @@ vimcmd_symbol = '[](bold fg:creen)'
 vimcmd_replace_one_symbol = '[](bold fg:purple)'
 vimcmd_replace_symbol = '[](bold fg:purple)'
 vimcmd_visual_symbol = '[](bold fg:lavender)'
+
+[jobs]
+format = '[$symbol$number ]($style)'
+style = "bg:surface0 fg:sapphire"
