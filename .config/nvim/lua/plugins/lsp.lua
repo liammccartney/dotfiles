@@ -12,6 +12,10 @@ return {
 				ensure_installed = {
 					"lua_ls",
 					"tsserver",
+					"omnisharp",
+					"html",
+					"jsonls",
+					"angularls",
 				},
 			})
 		end,
@@ -29,13 +33,27 @@ return {
 
 			lspconfig.tsserver.setup({
 				capabilities = capabilities,
+				root_dir = lspconfig.util.root_pattern("package.json", "tsconfig.base.json"),
 			})
 
+			lspconfig.angularls.setup({
+				capabilities = capabilities,
+				root_dir = lspconfig.util.root_pattern("package.json", "tsconfig.base.json"),
+			})
+
+			lspconfig.omnisharp.setup({
+				capabilities = capabilities,
+        -- TODO: Set root_dir to *.csproj or *.sln location instead?
+				root_dir = lspconfig.util.find_git_ancestor,
+			})
+
+      -- TODO: Move to Lazy Keys Prop
 			vim.keymap.set("n", "<space>e", vim.diagnostic.open_float)
 			vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
 			vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
 			vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist)
 
+      -- TODO: Does Lazy Have a Autocmd Prop?
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("UserLspConfig", {}),
 				callback = function(ev)

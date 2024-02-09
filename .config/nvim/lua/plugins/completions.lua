@@ -26,13 +26,16 @@ return {
       cmp.setup({
         snippet = {
           expand = function(args)
-            require("luasnip").lsp_expand(args.body) -- For `luasnip` users.
+            require("luasnip").lsp_expand(args.body)
           end,
         },
         window = {
           completion = cmp.config.window.bordered(),
           documentation = cmp.config.window.bordered(),
         },
+        -- TODO: Refactor to use lsp-zero's style of supertab which i think is subtly different
+        -- and i got really used to over the past few months [2024-02-09]
+        -- https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/lua/lsp-zero/cmp-mapping.lua
         mapping = {
           ["<Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
