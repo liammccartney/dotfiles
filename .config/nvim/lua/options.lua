@@ -9,7 +9,7 @@ o.number = true
 o.relativenumber = true
 -- Show Signs in the same column as the Numbers
 -- Prevents horizontal janky jumps
-o.signcolumn = 'number'
+o.signcolumn = "number"
 
 -- Use Spaces, which I understand is less
 -- accessible but I'm not used to tabs yet
@@ -39,14 +39,14 @@ o.matchtime = 3
 o.hidden = true
 
 -- If file already open in a buffer, go there
-o.switchbuf = 'useopen'
+o.switchbuf = "useopen"
 
 -- Highlight Current Line
 o.cursorline = true
 
 o.swapfile = false
 o.backup = false
-o.undodir = os.getenv('HOME') .. '/.vim/undodir'
+o.undodir = os.getenv("HOME") .. "/.vim/undodir"
 o.undofile = true
 
 o.termguicolors = true
