@@ -11,7 +11,5 @@ return {
   keys = {
     {'<leader>a', function () require('harpoon'):list():append() end },
     {'<C-e>', function () require('harpoon').ui:toggle_quick_menu(require('harpoon'):list()) end },
-    -- {'<leader>a', function () require('harpoon'):list():apeend() end },
-    -- {'<leader>a', function () require('harpoon'):list():apeend() end },
   }
 }

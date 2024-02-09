@@ -2,25 +2,14 @@ return {
   'nvim-telescope/telescope.nvim',
   version = false,
   lazy = false,
+  priority = 1000,
   dependencies = {
-    'nvim-lua/plenary.nvim',
-    { 'nvim-telescope/telescope-ui-select.nvim' }
-    -- TODO: I don't know why I'd what telescope-fzf-native yet
-    --{
-    --  "nvim-telescope/telescope-fzf-native.nvim",
-    --  build = "make",
-    --  enabled = vm.fn.executable("make") == 1,
-    --  config = function()
-    --    Util.on_load("telescope.nvim", function()
-    --      require("telescope").load_extension("fzf")
-    --    end)
-    --  end,
-    --}
+     'nvim-lua/plenary.nvim',
+     'nvim-telescope/telescope-ui-select.nvim'
   },
   keys = {
     { '<c-f>', function() require('telescope.builtin').find_files() end, desc = "Find Files" },
     { '<c-b>', function() require('telescope.builtin').buffers() end, desc = 'Find Open Buffers' },
-    desc = "Find Buffers",
     { '<leader>g',  function() require('telescope.builtin').live_grep() end,            desc = "Live Grep" },
     { '<leader>ss', function() require('telescope.builtin').lsp_document_symbols() end, desc = "Go to Symbol" },
   },
