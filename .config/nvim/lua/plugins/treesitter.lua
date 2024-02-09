@@ -1,5 +1,3 @@
--- Maybe Install?
---  "nvim-treesitter/nvim-treesitter-textobjects",
 return {
   {
     "nvim-treesitter/nvim-treesitter",
