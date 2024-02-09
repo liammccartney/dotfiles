@@ -32,7 +32,7 @@ map("n", "<leader>vs", ":vsplit<CR>", { desc = "Open Vertical Split" })
 map("n", "<leader><CR>", ":noh<CR>", { desc = "Clear Search Highlights" })
 
 -- Close all open location lists, or w/e they're called
--- that get opend by other plugins
+-- that get opened by other plugins
 map("n", "<leader>cc", ":cclose<cr> :pclose<cr> :lclose<cr>", { desc = "Close all loc and quickfix lists" })
 
 -- Jump list Navigation
