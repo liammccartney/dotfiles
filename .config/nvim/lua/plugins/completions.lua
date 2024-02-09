@@ -1,48 +1,3 @@
--- TODO: Refactor to a separate module
-local function get_cmp()
-  local ok_cmp, cmp = pcall(require, "cmp")
-  return ok_cmp and cmp or {}
-end
-
-local function get_luasnip()
-  local ok_luasnip, luasnip = pcall(require, "luasnip")
-  return ok_luasnip and luasnip or {}
-end
-
-local function luasnip_supertab(select_opts)
-  local cmp = get_cmp()
-  local luasnip = get_luasnip()
-
-  return cmp.mapping(function(fallback)
-    local col = vim.fn.col(".") - 1
-
-    if cmp.visible() then
-      cmp.select_next_item(select_opts)
-    elseif luasnip.expand_or_jumpable() then
-      luasnip.expand_or_jump()
-    elseif col == 0 or vim.fn.getline("."):sub(col, col):match("%s") then
-      fallback()
-    else
-      cmp.complete()
-    end
-  end, { "i", "s" })
-end
-
-local function luasnip_shift_supertab(select_opts)
-  local cmp = get_cmp()
-  local luasnip = get_luasnip()
-
-  return cmp.mapping(function(fallback)
-    if cmp.visible() then
-      cmp.select_prev_item(select_opts)
-    elseif luasnip.jumpable(-1) then
-      luasnip.jump(-1)
-    else
-      fallback()
-    end
-  end, { "i", "s" })
-end
-
 return {
   {
     "hrsh7th/cmp-nvim-lsp",
@@ -63,6 +18,8 @@ return {
       local cmp = require("cmp")
       require("luasnip.loaders.from_vscode").lazy_load()
 
+      local supertab = require('util.supertab')
+
       cmp.setup({
         snippet = {
           expand = function(args)
@@ -74,8 +31,8 @@ return {
           documentation = cmp.config.window.bordered(),
         },
         mapping = cmp.mapping.preset.insert({
-          ["<Tab>"] = luasnip_supertab(),
-          ["<S-Tab>"] = luasnip_shift_supertab(),
+          ["<Tab>"] = supertab.luasnip_supertab(),
+          ["<S-Tab>"] = supertab.luasnip_shift_supertab(),
           ["<CR>"] = cmp.mapping.confirm({ select = true }),
         }),
         formatting = {
