@@ -51,3 +51,5 @@ export PATH="/Users/liam/Library/Python/3.11/bin/:$PATH"
 # Load Angular CLI autocompletion.
 source <(ng completion script)
 export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+
+eval "$(zoxide init --cmd cd zsh)"
