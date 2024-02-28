@@ -92,3 +92,5 @@
   tool = vimdiff
 [init]
 	defaultBranch = main
+[merge]
+	conflictStyle = zdiff3
