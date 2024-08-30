@@ -1,28 +1,26 @@
 [core]
   # Excludesfiles allows us to set a global list of things to ignore
-  excludesfile = ~/.gitignore_global
+	excludesfile = /Users/liam/.gitignore_global
   editor = nvim
   pager = delta
 
-[pager]
-  diff = delta
-  log = delta
-  reflog = delta
-  show = delta
-
+; [pager]
+;   diff = delta
+;   log = delta
+;   reflog = delta
+;   show = delta
+;
 [interactive]
   diffFilter = delta --color-only
-
+;
 [delta]
-  features = side-by-side line-numbers decorations
-  syntax-theme = Nord
   navigate = true
-
-[delta "decorations"]
-  commit-decoration-style = bold yellow box ul
-  file-style = bold yellow ul
-  file-decoration-style = none
-
+;
+; [delta "decorations"]
+;   commit-decoration-style = bold yellow box ul
+;   file-style = bold yellow ul
+;   file-decoration-style = none
+;
 # These are custom color options for the console
 [color]
   ui = auto
@@ -89,8 +87,14 @@
   default = simple
 	autoSetupRemote = true
 [diff]
+  colorMoved = default
   tool = vimdiff
 [init]
 	defaultBranch = main
 [merge]
 	conflictStyle = zdiff3
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
