@@ -53,3 +53,6 @@ source <(ng completion script)
 export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 
 eval "$(zoxide init --cmd cd zsh)"
+eval $(thefuck --alias heck)
+export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"
+export PATH="/Users/liam/.local/bin:$PATH"
