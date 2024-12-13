@@ -66,17 +66,7 @@ return {
         cmd = { "dotnet", "/Users/liam/.local/share/nvim/mason/packages/omnisharp/libexec/OmniSharp.dll" },
         capabilities = capabilities,
         root_dir = lspconfig.util.root_pattern( "*.sln"),
-        settings = {
-          FormattingOptions = {
-            EnableEditorConfigSupport = true
-          }
-        }
       })
-
-      -- lspconfig.csharp_ls.setup({
-      --   capabilities = capabilities,
-      --   root_dir = lspconfig.util.find_git_ancestor,
-      -- })
 
       lspconfig.html.setup({
         capabilities = capabilities,

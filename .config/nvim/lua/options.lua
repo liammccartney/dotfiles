@@ -1,4 +1,5 @@
 local o = vim.o
+local g = vim.g
 
 -- Include a lot of past commands so seaching them
 -- is useful
@@ -50,3 +51,5 @@ o.undofile = true
 o.termguicolors = true
 
 o.backupcopy = "yes"
+
+g.editorconfig = false
