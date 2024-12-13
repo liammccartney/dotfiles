@@ -3,9 +3,9 @@ return {
   cmd = "LoveRun",
   opts = { },
   keys = {
-    { "<leader>v", desc = "LÖVE" },
-    { "<leader>vv", "<cmd>LoveRun<cr>", desc = "Run LÖVE" },
-    { "<leader>vvs", "<cmd>LoveStop<cr>", desc = "Stop LÖVE" },
+    { "<leader>lv", desc = "LÖVE" },
+    { "<leader>lvv", "<cmd>LoveRun<cr>", desc = "Run LÖVE" },
+    { "<leader>lvvs", "<cmd>LoveStop<cr>", desc = "Stop LÖVE" },
   },
 }
 

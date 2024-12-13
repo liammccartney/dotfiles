@@ -13,6 +13,7 @@ return {
                 -- require("none-ls.diagnostics.eslint"),
                 null_ls.builtins.formatting.mix,
                 null_ls.builtins.formatting.black,
+                -- null_ls.builtins.formatting.csharpier,
             },
         })
     end,
