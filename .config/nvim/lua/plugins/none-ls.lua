@@ -14,6 +14,7 @@ return {
                 null_ls.builtins.formatting.mix,
                 null_ls.builtins.formatting.black,
                 -- null_ls.builtins.formatting.csharpier,
+                null_ls.builtins.formatting.mix,
             },
         })
     end,

@@ -40,3 +40,7 @@ map("n", "<UP>", "<C-o>")
 map("n", "<Down>", "<C-i>")
 map("n", "<Left>", ":bprev<CR>")
 map("n", "<Right>", ":bnext<CR>")
+
+map('n', '<leader>dw', require('dotnet-watch').start_watch, {desc = 'Start dotnet watch'})
+map('n', '<leader>dt', require('dotnet-watch').toggle_terminal, {desc = 'Toggle dotnet watch terminal'})
+map('n', '<leader>dq', require('dotnet-watch').stop_watch, {desc = 'Quit dotnet watch'})
