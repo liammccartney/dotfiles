@@ -32,5 +32,7 @@ return {
         cwd = vim.fs.joinpath(vim.fn.stdpath('data'), 'lazy')
       })
     end)
+
+    require("custom.telescope.multigrep").setup()
   end
 }
