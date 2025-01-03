@@ -2,9 +2,18 @@
 -- https://github.com/neovim/neovim/issues/31675
 vim.hl = vim.highlight
 
+vim.cmd('filetype plugin on')
+
 local g = vim.g
+local o = vim.o
 
 g.mapleader = ","
+
+o.expandtab = true
+-- o.tabstop = 2
+-- o.shiftwidth = 2
+-- o.softtabstop = 2
+-- o.autoindent = true
 
 local function map(m, k, v, opts)
   opts = opts or {}
@@ -62,5 +71,13 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     vim.highlight.on_yank()
   end,
 })
+
+vim.opt.list = true
+
+vim.opt.listchars = {
+  tab = ">-",
+  trail = ".",
+  eol = '¬',
+}
 
 require("config.lazy")
