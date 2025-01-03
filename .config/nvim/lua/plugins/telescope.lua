@@ -1,71 +1,38 @@
 return {
-    "nvim-telescope/telescope.nvim",
-    version = false,
-    lazy = false,
-    priority = 1000,
-    dependencies = {
-        "nvim-lua/plenary.nvim",
-        "nvim-telescope/telescope-ui-select.nvim",
-    },
-    keys = {
-        {
-            "<c-f>",
-            function()
-                require("telescope.builtin").find_files()
-            end,
-            desc = "Find Files",
-        },
-        {
-            "<c-b>",
-            function()
-                require("telescope.builtin").buffers()
-            end,
-            desc = "Find Open Buffers",
-        },
-        {
-            "<leader>g",
-            function()
-                require("telescope.builtin").live_grep()
-            end,
-            desc = "Live Grep",
-        },
-        {
-            "<leader>ss",
-            function()
-                require("telescope.builtin").lsp_document_symbols()
-            end,
-            desc = "Go to Symbol",
-        },
-    },
-    config = function()
-        local actions = require("telescope.actions")
+  'nvim-telescope/telescope.nvim',
+  tag = '0.1.8',
+  dependencies = {
+    'nvim-lua/plenary.nvim',
+    { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' }
+  },
+  config = function()
+    require('telescope').setup({
+      pickers = {
+        find_files = {
+          theme = "ivy"
+        }
+      }
+    })
 
-        require("telescope").setup({
-            defaults = {
-                mappings = {
-                    i = {
-                        ["<c-j>"] = {
-                            actions.move_selection_next,
-                            type = "action",
-                            opts = { nowait = true, silent = true },
-                        },
-                        ["<c-k>"] = {
-                            actions.move_selection_previous,
-                            type = "action",
-                            opts = { nowait = true, silent = true },
-                        },
-                        ["<ESC>"] = actions.close,
-                        ["<c-d>"] = actions.delete_buffer,
-                    },
-                },
-            },
-            extensions = {
-                ["ui-select"] = {
-                    require("telescope.themes").get_dropdown({}),
-                },
-            },
-        })
+    require('telescope').load_extension('fzf')
 
-        require("telescope").load_extension("ui-select")
-    end,
+    vim.keymap.set("n", "<C-f>", require('telescope.builtin').find_files)
+    vim.keymap.set("n", "<space>fh", require('telescope.builtin').help_tags)
+    vim.keymap.set("n", "<space>en", function()
+      require('telescope.builtin').find_files({
+        -- TODO: re-link the contents of dotfiles/.config to ~/.config
+        -- cwd = vim.fn.stdpath('config')
+        cwd = "/Users/liam/dotfiles/.config/nvim/"
+      })
+    end)
+    vim.keymap.set("n", "<space>ep", function()
+      require('telescope.builtin').find_files({
+        -- TODO: re-link the contents of dotfiles/.config to ~/.config
+        -- cwd = vim.fn.stdpath('config')
+        cwd = vim.fs.joinpath(vim.fn.stdpath('data'), 'lazy')
+      })
+    end)
+
+    require("custom.telescope.multigrep").setup()
+  end
 }
