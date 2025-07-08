@@ -10,10 +10,7 @@ local o = vim.o
 g.mapleader = ","
 
 o.expandtab = true
--- o.tabstop = 2
--- o.shiftwidth = 2
--- o.softtabstop = 2
--- o.autoindent = true
+vim.o.smartcase = true
 
 local function map(m, k, v, opts)
   opts = opts or {}
@@ -79,5 +76,18 @@ vim.opt.listchars = {
   trail = ".",
   eol = '¬',
 }
+
+local function get_relative_path()
+  local full_path = vim.fn.expand('%:p')
+  local cwd = vim.fn.getcwd()
+
+  local relative_path = string.gsub(full_path, "^" .. vim.pesc(cwd) .. "/", "")
+
+  vim.fn.setreg('+', relative_path)
+end
+
+vim.keymap.set('n', '<space>cf', get_relative_path)
+
+vim.o.backupcopy = "yes"
 
 require("config.lazy")

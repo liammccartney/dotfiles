@@ -1,6 +1,6 @@
 [core]
   # Excludesfiles allows us to set a global list of things to ignore
-	excludesfile = /Users/liam/.gitignore_global
+  excludesfile = /Users/liam/.gitignore_global
   editor = nvim
   pager = delta
 
@@ -33,6 +33,7 @@
 # Aliases are command shortcuts
 [alias]
   co = checkout
+  lb = !git reflog show --pretty=format:'%gs ~ %gd' --date=relative | grep 'checkout:' | grep -oE '[^ ]+ ~ .*' | awk -F~ '!seen[$1]++' | head -n 10 | awk -F' ~ HEAD@{' '{printf(\"  \\033[33m%s: \\033[37m %s\\033[0m\\n\", substr($2, 1, length($2)-1), $1)}'
 
   # lg is now a shortcut for a pretty log with short commit messages
   # See the log manpage: https://www.kernel.org/pub/software/scm/git/docs/git-log.html
@@ -80,21 +81,23 @@
   awip = !git amend -m WIP
 
   push-this = "!. ~/.githelpers && push_this"
+
 [user]
   name = Liam McCartney
   email = liam.mccartney@gmail.com
 [push]
   default = simple
-	autoSetupRemote = true
+  autoSetupRemote = true
+
 [diff]
   colorMoved = default
   tool = vimdiff
 [init]
-	defaultBranch = main
+  defaultBranch = main
 [merge]
-	conflictStyle = zdiff3
+  conflictStyle = zdiff3
 [filter "lfs"]
-	required = true
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
+  required = true
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process

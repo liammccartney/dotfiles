@@ -8,6 +8,7 @@ alias gb="git branch"
 alias vim="nvim"
 alias vi="nvim"
 alias v="nvim"
+alias vv="/Users/liam/nvim-macos-arm64/bin/nvim"
 alias cat="bat"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -56,3 +57,8 @@ eval "$(zoxide init --cmd cd zsh)"
 eval $(thefuck --alias heck)
 export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"
 export PATH="/Users/liam/.local/bin:$PATH"
+export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+export PATH="/opt/homebrew/lib/ruby/gems/3.4.0/bin/:$PATH"
+export PATH="/opt/homebrew/opt/sqlite/bin:$PATH"
+export PATH="$PATH:$HOME/go/bin"
+export DOTNET_ROOT="$(dirname $(which dotnet))"
