@@ -7,6 +7,16 @@ return {
   },
   config = function()
     require('telescope').setup({
+      defaults = {
+        mappings = {
+          n = {
+            ['<c-d>'] = require('telescope.actions').delete_buffer
+          },
+          i = {
+            ['<c-d>'] = require('telescope.actions').delete_buffer
+          }
+        }
+      },
       pickers = {
         find_files = {
           theme = "ivy"
