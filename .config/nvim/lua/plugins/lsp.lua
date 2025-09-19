@@ -53,11 +53,21 @@ return {
       end,
     }
 
-    local path_to_elixir_ls = vim.fs.joinpath(vim.uv.os_homedir(), "Code/language-servers/elixir-ls/language_server.sh")
-    require('lspconfig').elixirls.setup {
-      cmd = { path_to_elixir_ls },
-      capabilities = capabilities
-    }
+    vim.lsp.enable 'bashls'
+
+    -- local path_to_elixir_ls = vim.fs.joinpath(vim.uv.os_homedir(), "Code/language-servers/elixir-ls/language_server.sh")
+    -- require('lspconfig').elixirls.setup {
+    --   cmd = { path_to_elixir_ls },
+    --   capabilities = capabilities
+    -- }
+
+    vim.lsp.config('expert', {
+      cmd = { 'expert' },
+      root_markers = { 'mix.exs', '.git' },
+      filetypes = { 'elixir', 'eelixir', 'heex' },
+    })
+
+    vim.lsp.enable 'expert'
 
     require 'lspconfig'.jsonls.setup {
       capabilities = capabilities,
