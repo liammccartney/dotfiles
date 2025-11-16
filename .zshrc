@@ -53,7 +53,11 @@ export PATH="/Users/liam/Library/Python/3.11/bin/:$PATH"
 source <(ng completion script)
 export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 
-eval "$(zoxide init --cmd cd zsh)"
+# Only load zoxide outside of claude cli sessions
+# i hate having to do this but alas
+if [[ "$CLAUDECODE" != "1" ]]; then
+    eval "$(zoxide init --cmd cd zsh)"
+fi
 eval $(thefuck --alias heck)
 export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"
 # export PATH="/Users/liam/.local/bin:$PATH"
@@ -65,3 +69,5 @@ export PATH="$HOME/.local/bin/:$PATH"
 export DOTNET_ROOT="$(dirname $(which dotnet))"
 eval "$(uv generate-shell-completion zsh)"
 eval "$(uvx --generate-shell-completion zsh)"
+
+eval $(thefuck --alias)

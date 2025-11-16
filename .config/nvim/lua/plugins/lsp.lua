@@ -16,50 +16,27 @@ return {
   config = function()
     local capabilities = require('blink.cmp').get_lsp_capabilities()
 
-    require("lspconfig").lua_ls.setup { capabilities = capabilities }
+    vim.lsp.config('lua_ls', { capabilities = capabilities })
 
-    require 'lspconfig'.tailwindcss.setup {}
+    vim.lsp.config('tailwindcss', {})
 
-    require 'lspconfig'.csharp_ls.setup { capabilities = capabilities }
-
-    require 'lspconfig'.clangd.setup {
-      cmd = { 'clangd', '--background-index', '--clang-tidy', '--log=verbose' },
-    }
-
-    require 'lspconfig'.rust_analyzer.setup {
-      capabilities = capabilities,
-      settings = {
-        ['rust-analyzer'] = {
-          diagnostics = {
-            enable = true,
-          }
-        }
-      }
-    }
+    vim.lsp.config('csharp_ls', { capabilities = capabilities })
 
     local project_library_path = "ngserver"
     local cmd = { "ngserver", "--stdio", "--tsProbeLocations", project_library_path, "--ngProbeLocations",
       project_library_path }
 
-    require('lspconfig').ts_ls.setup({
+    vim.lsp.config('ts_ls', ({
       capabilities = capabilities
-    })
+    }))
 
-    require 'lspconfig'.angularls.setup {
+    vim.lsp.config('angularls', {
       capabilities = capabilities,
       cmd = cmd,
       on_new_config = function(new_config, new_root_dir)
         new_config.cmd = cmd
       end,
-    }
-
-    vim.lsp.enable 'bashls'
-
-    -- local path_to_elixir_ls = vim.fs.joinpath(vim.uv.os_homedir(), "Code/language-servers/elixir-ls/language_server.sh")
-    -- require('lspconfig').elixirls.setup {
-    --   cmd = { path_to_elixir_ls },
-    --   capabilities = capabilities
-    -- }
+    })
 
     vim.lsp.config('expert', {
       cmd = { 'expert' },
@@ -67,25 +44,15 @@ return {
       filetypes = { 'elixir', 'eelixir', 'heex' },
     })
 
-    vim.lsp.enable 'expert'
-
-    require 'lspconfig'.jsonls.setup {
+    vim.lsp.config('jsonls', {
       capabilities = capabilities,
-    }
+    })
 
-    require 'lspconfig'.elmls.setup {}
+    vim.lsp.config('elmls', {})
 
-    require 'lspconfig'.pyright.setup {}
+    vim.lsp.config('pyright', {})
 
-    require 'lspconfig'.ruby_lsp.setup {}
-
-    require 'lspconfig'.rubocop.setup {}
-
-    require 'lspconfig'.fsautocomplete.setup {}
-
-    require 'lspconfig'.sqls.setup {}
-
-    require 'lspconfig'.gopls.setup { capabilities = capabilities }
+    vim.lsp.enable({ 'lua_ls', 'angularls', 'csharp_ls', 'expert', 'ts_ls' })
 
 
     vim.api.nvim_create_autocmd('LspAttach', {
@@ -137,21 +104,14 @@ return {
         })
       end)
 
-    vim.keymap.set("n", "gt",
-      function()
-        vim.lsp.buf.execute_command({
-          command = "_angular.goToTemplateFile",
-          arguments = {
-            vim.api.nvim_buf_get_name(0)
-          }
-        })
-      end)
-
     -- TODO: Does Lazy Have a Autocmd Prop?
     vim.api.nvim_create_autocmd("LspAttach", {
       group = vim.api.nvim_create_augroup("UserLspConfig", {}),
       callback = function(ev)
         local opts = { buffer = ev.buf }
+        local client = vim.lsp.get_client_by_id(ev.data.client_id)
+
+        if not client then return end
 
         vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
 
@@ -166,6 +126,19 @@ return {
           vim.lsp.buf.format({ async = true })
         end, opts)
         vim.keymap.set({ "n", "v" }, "<F4>", vim.lsp.buf.code_action, opts)
+
+        -- Angular-specific mapping for TypeScript files
+        if vim.bo[ev.buf].filetype == "typescript" and client.name == "angularls" then
+          vim.keymap.set("n", "gt", function()
+            client:exec_cmd({
+              title = "Go to template",
+              command = "angular.goToTemplateForComponent",
+              arguments = {
+                vim.api.nvim_buf_get_name(0)
+              }
+            })
+          end, opts)
+        end
       end,
     })
 
