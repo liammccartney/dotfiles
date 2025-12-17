@@ -18,8 +18,6 @@ return {
 
     vim.lsp.config('lua_ls', { capabilities = capabilities })
 
-    vim.lsp.config('tailwindcss', {})
-
     vim.lsp.config('csharp_ls', { capabilities = capabilities })
 
     local project_library_path = "ngserver"
@@ -48,31 +46,7 @@ return {
       capabilities = capabilities,
     })
 
-    vim.lsp.config('elmls', {})
-
-    vim.lsp.config('pyright', {})
-
     vim.lsp.enable({ 'lua_ls', 'angularls', 'csharp_ls', 'expert', 'ts_ls' })
-
-
-    vim.api.nvim_create_autocmd('LspAttach', {
-      callback = function(args)
-        local client = vim.lsp.get_client_by_id(args.data.client_id)
-
-        if not client then return end
-
-        vim.keymap.set("n", "<space>f", function() vim.lsp.buf.format() end)
-
-        if client:supports_method('textDocument/formatting') and vim.bo.filetype == "lua" then
-          vim.api.nvim_create_autocmd('BufWritePre', {
-            buffer = args.buf,
-            callback = function()
-              vim.lsp.buf.format({ bufnr = args.buf, id = client.id })
-            end
-          })
-        end
-      end
-    })
 
     -- TODO: Move to Lazy Keys Prop
     vim.keymap.set("n", "<space>e", vim.diagnostic.open_float)
@@ -104,7 +78,6 @@ return {
         })
       end)
 
-    -- TODO: Does Lazy Have a Autocmd Prop?
     vim.api.nvim_create_autocmd("LspAttach", {
       group = vim.api.nvim_create_augroup("UserLspConfig", {}),
       callback = function(ev)
@@ -113,19 +86,33 @@ return {
 
         if not client then return end
 
+        -- Hover and navigation
         vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-
         vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
         vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
         vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-        vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
+        vim.keymap.set("n", "<leader>k", vim.lsp.buf.signature_help, opts)
         vim.keymap.set("n", "<space>D", vim.lsp.buf.type_definition, opts)
 
+        -- Actions
         vim.keymap.set("n", "<F2>", vim.lsp.buf.rename, opts)
         vim.keymap.set("n", "<F3>", function()
           vim.lsp.buf.format({ async = true })
         end, opts)
         vim.keymap.set({ "n", "v" }, "<F4>", vim.lsp.buf.code_action, opts)
+
+        -- Formatting
+        vim.keymap.set("n", "<space>f", function() vim.lsp.buf.format() end, opts)
+
+        -- Auto-format Lua files on save
+        if client:supports_method('textDocument/formatting') and vim.bo[ev.buf].filetype == "lua" then
+          vim.api.nvim_create_autocmd('BufWritePre', {
+            buffer = ev.buf,
+            callback = function()
+              vim.lsp.buf.format({ bufnr = ev.buf, id = client.id })
+            end
+          })
+        end
 
         -- Angular-specific mapping for TypeScript files
         if vim.bo[ev.buf].filetype == "typescript" and client.name == "angularls" then

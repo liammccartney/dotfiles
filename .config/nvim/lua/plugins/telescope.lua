@@ -31,9 +31,7 @@ return {
     vim.keymap.set("n", "<space>fh", require('telescope.builtin').help_tags)
     vim.keymap.set("n", "<space>en", function()
       require('telescope.builtin').find_files({
-        -- TODO: re-link the contents of dotfiles/.config to ~/.config
-        -- cwd = vim.fn.stdpath('config')
-        cwd = "/Users/liam/dotfiles/.config/nvim/"
+        cwd = vim.fn.expand('~/dotfiles/.config/nvim/')
       })
     end)
     vim.keymap.set("n", "<space>ep", function()

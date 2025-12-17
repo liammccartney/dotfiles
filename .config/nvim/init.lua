@@ -6,9 +6,9 @@ vim.opt.scrolloff = 10        -- Keep 10 lines above/below cursor
 vim.opt.sidescrolloff = 8     -- Keep 8 columns left/right of cursor
 
 -- Indentation
--- vim.opt.tabstop = 2        -- Tab width
--- vim.opt.shiftwidth = 2     -- Indent width
--- vim.opt.softtabstop = 2    -- Soft tab stop
+vim.opt.tabstop = 2        -- Tab width
+vim.opt.shiftwidth = 2     -- Indent width
+vim.opt.softtabstop = 2    -- Soft tab stop
 vim.opt.expandtab = true   -- Use spaces instead of tabs
 vim.opt.smartindent = true -- Smart auto-indenting
 vim.opt.autoindent = true  -- Copy indent from current line
@@ -48,7 +48,6 @@ vim.opt.autoread = true                           -- Auto reload files changed o
 vim.opt.autowrite = false                         -- Don't auto save
 
 -- Behavior settings
-vim.opt.hidden = true                   -- Allow hidden buffers
 vim.opt.errorbells = false              -- No error bells
 vim.opt.backspace = "indent,eol,start"  -- Better backspace behavior
 vim.opt.autochdir = false               -- Don't auto change directory
@@ -56,20 +55,18 @@ vim.opt.iskeyword:append("-")           -- Treat dash as part of word
 vim.opt.path:append("**")               -- include subdirectories in search
 vim.opt.mouse = "a"                     -- Enable mouse support
 vim.opt.clipboard:append("unnamedplus") -- Use system clipboard
-vim.opt.modifiable = true               -- Allow buffer modifications
-vim.opt.encoding = "UTF-8"              -- Set encoding
 
 vim.opt.list = true
 
 vim.opt.listchars = {
   tab = ">-",
   trail = ".",
-  eol = '¬',
+  -- eol = '¬',  -- Disabled: too visually noisy
 }
 
 -- Key mappings
-vim.g.mapleader = ","      -- Set leader key to space
-vim.g.maplocalleader = "," -- Set local leader key (NEW)
+vim.g.mapleader = ","      -- Set leader key to comma
+vim.g.maplocalleader = "," -- Set local leader key
 
 -- Center screen when jumping
 vim.keymap.set("n", "n", "nzzzv", { desc = "Next search result (centered)" })
@@ -114,9 +111,6 @@ vim.keymap.set("n", "<leader>W", ":wa!<CR>", { desc = "Save All Files" })
 
 -- Toggle between buffers
 vim.keymap.set("n", "<leader><leader>", "<c-^>", { desc = "Toggle Between Buffers" })
-
--- Split vertically quickly
-vim.keymap.set("n", "<leader>vs", ":vsplit<CR>", { desc = "Open Vertical Split" })
 
 -- Clear search highlights
 vim.keymap.set("n", "<leader><CR>", ":noh<CR>", { desc = "Clear Search Highlights" })
