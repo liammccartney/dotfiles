@@ -1,6 +1,8 @@
-export ZSH="$HOME/.oh-my-zsh"
-
-source $ZSH/oh-my-zsh.sh
+export HISTSIZE=1000000000
+export SAVEHIST=$HISTSIZE
+setopt EXTENDED_HISTORY
+setopt autocd
+autoload -U compinit; compinit
 
 alias gs="git status"
 alias gd="git diff"
@@ -71,3 +73,15 @@ eval "$(uv generate-shell-completion zsh)"
 eval "$(uvx --generate-shell-completion zsh)"
 
 eval $(thefuck --alias)
+
+# source $(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+# bindkey '^[[A' history-substring-search-up
+# bindkey '^[[B' history-substring-search-down
+
+# Source - https://superuser.com/a
+# Posted by Francisco, modified by community. See post 'Timeline' for change history
+# Retrieved 2026-01-23, License - CC BY-SA 3.0
+
+bindkey '^[[A' up-line-or-search
+bindkey '^[[B' down-line-or-search
+

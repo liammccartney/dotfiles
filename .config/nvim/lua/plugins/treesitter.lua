@@ -30,5 +30,10 @@ return {
         additional_vim_regex_highlighting = false,
       },
     }
-  end
+
+    require 'treesitter-context'.setup()
+  end,
+  dependencies = {
+    "nvim-treesitter/nvim-treesitter-context"
+  }
 }
