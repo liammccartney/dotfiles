@@ -20,6 +20,11 @@ return {
 
     vim.lsp.config('csharp_ls', { capabilities = capabilities })
 
+    vim.lsp.config('ols', {
+      capabilities = capabilities,
+    })
+
+
     local project_library_path = "ngserver"
     local cmd = { "ngserver", "--stdio", "--tsProbeLocations", project_library_path, "--ngProbeLocations",
       project_library_path }
@@ -40,7 +45,17 @@ return {
       capabilities = capabilities,
     })
 
-    vim.lsp.enable({ 'lua_ls', 'angularls', 'csharp_ls', 'expert', 'ts_ls' })
+    vim.lsp.config('ruff', {
+      init_options = {
+        settings = {
+          -- Ruff language server settings go here
+        }
+      }
+    })
+
+    vim.lsp.enable('ruff')
+
+    vim.lsp.enable({ 'lua_ls', 'angularls', 'csharp_ls', 'expert', 'ts_ls', 'ols' })
 
     -- TODO: Move to Lazy Keys Prop
     vim.keymap.set("n", "<space>e", vim.diagnostic.open_float)

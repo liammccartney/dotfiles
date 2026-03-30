@@ -68,7 +68,6 @@ export PATH="/opt/homebrew/lib/ruby/gems/3.4.0/bin/:$PATH"
 export PATH="/opt/homebrew/opt/sqlite/bin:$PATH"
 export PATH="$PATH:$HOME/go/bin"
 export PATH="$HOME/.local/bin/:$PATH"
-export DOTNET_ROOT="$(dirname $(which dotnet))"
 eval "$(uv generate-shell-completion zsh)"
 eval "$(uvx --generate-shell-completion zsh)"
 
@@ -81,7 +80,21 @@ eval $(thefuck --alias)
 # Source - https://superuser.com/a
 # Posted by Francisco, modified by community. See post 'Timeline' for change history
 # Retrieved 2026-01-23, License - CC BY-SA 3.0
+#
+#
+
+safe() { safehouse --add-dirs-ro=~/Fulcrum/ "$@";  }
+claude() { safe claude --dangerously-skip-permissions "$@"; }
 
 bindkey '^[[A' up-line-or-search
 bindkey '^[[B' down-line-or-search
 
+export PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"
+export PATH="/Users/liam/Languages/Odin:$PATH"
+export PATH="/Users/liam/LSP/ols:$PATH"
+
+autoload -Uz +X compinit && compinit
+
+## case insensitive path-completion
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+zstyle ':completion:*' menu select

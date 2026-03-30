@@ -83,6 +83,7 @@
   awip = !git amend -m WIP
 
   push-this = "!. ~/.githelpers && push_this"
+	cv = diff --name-only --diff-filter=U --relative
 
 [user]
   name = Liam McCartney
