@@ -73,19 +73,6 @@ eval "$(uvx --generate-shell-completion zsh)"
 
 eval $(thefuck --alias)
 
-# source $(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh
-# bindkey '^[[A' history-substring-search-up
-# bindkey '^[[B' history-substring-search-down
-
-# Source - https://superuser.com/a
-# Posted by Francisco, modified by community. See post 'Timeline' for change history
-# Retrieved 2026-01-23, License - CC BY-SA 3.0
-#
-#
-
-safe() { safehouse --add-dirs-ro=~/Fulcrum/ "$@";  }
-claude() { safe claude --dangerously-skip-permissions "$@"; }
-
 bindkey '^[[A' up-line-or-search
 bindkey '^[[B' down-line-or-search
 
@@ -98,3 +85,9 @@ autoload -Uz +X compinit && compinit
 ## case insensitive path-completion
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 zstyle ':completion:*' menu select
+
+# Entire CLI shell completion
+autoload -Uz compinit && compinit && source <(entire completion zsh)
+
+# Agent sandbox aliases
+source "$HOME/dotfiles/sandbox-profiles/shell-aliases.zsh"

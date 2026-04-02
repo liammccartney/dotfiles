@@ -150,5 +150,8 @@ local function get_relative_path()
 end
 
 vim.keymap.set('n', '<space>cf', get_relative_path)
+vim.keymap.set('n', '<space>cff', function()
+  vim.fn.setreg('+', vim.fn.expand('%:t'))
+end)
 
 require("config.lazy")
