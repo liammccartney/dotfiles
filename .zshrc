@@ -88,6 +88,3 @@ zstyle ':completion:*' menu select
 
 # Entire CLI shell completion
 autoload -Uz compinit && compinit && source <(entire completion zsh)
-
-# Agent sandbox aliases
-source "$HOME/dotfiles/sandbox-profiles/shell-aliases.zsh"
