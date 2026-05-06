@@ -23,8 +23,6 @@ mongodumps/
 
 coc-settings.json
 
-.nvmrc
-
 _build
 
 .angular/

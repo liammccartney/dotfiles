@@ -55,6 +55,8 @@ return {
 
     vim.lsp.enable('ruff')
 
+    vim.lsp.enable('gopls')
+
     vim.lsp.enable({ 'lua_ls', 'angularls', 'csharp_ls', 'expert', 'ts_ls', 'ols' })
 
     -- TODO: Move to Lazy Keys Prop
