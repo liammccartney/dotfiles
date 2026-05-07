@@ -58,12 +58,6 @@ vim.opt.clipboard:append("unnamedplus") -- Use system clipboard
 
 vim.opt.list = true
 
-vim.opt.listchars = {
-  tab = ">-",
-  trail = ".",
-  -- eol = '¬',  -- Disabled: too visually noisy
-}
-
 -- Key mappings
 vim.g.mapleader = ","      -- Set leader key to comma
 vim.g.maplocalleader = "," -- Set local leader key
