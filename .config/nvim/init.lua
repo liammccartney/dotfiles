@@ -4,14 +4,20 @@ vim.pack.add {
   { src = "https://github.com/neovim/nvim-lspconfig", name = "nvim-lspconfig" } ,
   { src = "https://github.com/nvim-treesitter/nvim-treesitter", name = "nvim-treesitter", version = 'main' } ,
   'https://github.com/saghen/blink.lib',
-  'https://github.com/saghen/blink.cmp'
+  'https://github.com/saghen/blink.cmp',
+  'https://github.com/nvim-lua/plenary.nvim',
+  'https://github.com/nvim-telescope/telescope.nvim',
+  'https://github.com/stevearc/oil.nvim'
 }
+
 
 local cmp = require('blink.cmp')
 cmp.build():wait(60000)
 cmp.setup()
 
 vim.cmd.colorscheme("catppuccin-nvim")
+
+require("oil").setup()
 
 -- Key mappings
 vim.g.mapleader = ","      -- Set leader key to comma
@@ -80,3 +86,53 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map('n', '<leader>e', vim.diagnostic.open_float, 'Show diagnostic')
   end,
 })
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'cs', 'typescript', 'html' },
+  callback = function()
+    -- syntax highlighting, provided by Neovim
+    vim.treesitter.start()
+    -- folds, provided by Neovim
+    -- vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+    -- vim.wo.foldmethod = 'expr'
+    -- indentation, provided by nvim-treesitter
+    vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+  end,
+})
+
+require('telescope').setup({
+  defaults = {
+    mappings = {
+          n = {
+            ['<c-d>'] = require('telescope.actions').delete_buffer
+          },
+          i = {
+            ['<c-d>'] = require('telescope.actions').delete_buffer
+          }
+        }
+  },
+  pickers = {
+    find_files = {
+      theme = 'ivy'
+    }
+  }
+})
+-- require('telescope').load_extension('fzf')
+vim.keymap.set("n", "<C-f>", require('telescope.builtin').find_files)
+    vim.keymap.set("n", "<C-b>", require('telescope.builtin').buffers)
+    vim.keymap.set("n", "<space>fh", require('telescope.builtin').help_tags)
+    vim.keymap.set("n", "<space>en", function()
+      require('telescope.builtin').find_files({
+        cwd = vim.fn.expand('~/dotfiles/.config/nvim/')
+      })
+    end)
+    vim.keymap.set("n", "<space>ep", function()
+      require('telescope.builtin').find_files({
+        -- TODO: re-link the contents of dotfiles/.config to ~/.config
+        -- cwd = vim.fn.stdpath('config')
+        cwd = vim.fs.joinpath(vim.fn.stdpath('data'), 'lazy')
+      })
+    end)
+
+    -- require("custom.telescope.multigrep").setup()
+
