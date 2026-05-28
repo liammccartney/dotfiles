@@ -151,11 +151,6 @@ end)
 require("config.lazy")
 
 -- LSP
-vim.lsp.config('*', {
-  root_markers = { '.git' },
-  capabilities = require('blink.cmp').get_lsp_capabilities(),
-})
-
 vim.lsp.enable({ 'lua_ls', 'ts_ls', 'csharp_ls', 'gopls' })
 
 vim.api.nvim_create_autocmd('LspAttach', {
