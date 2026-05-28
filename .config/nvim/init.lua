@@ -181,3 +181,12 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map('n', '<leader>e', vim.diagnostic.open_float, 'Show diagnostic')
   end,
 })
+
+vim.api.nvim_create_autocmd('VimEnter', {
+  group = vim.api.nvim_create_augroup('EditAppSettings', {}),
+  callback = function()
+    vim.keymap.set('n', '<leader>ea', function()
+      vim.cmd.edit('/Users/liam/Fulcrum/FulcrumProduct/FulcrumProduct/appsettings.json')
+    end)
+  end })
+
