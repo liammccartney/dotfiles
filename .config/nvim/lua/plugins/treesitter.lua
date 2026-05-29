@@ -4,7 +4,7 @@ return {
   build = ':TSUpdate',
   config = function()
     vim.api.nvim_create_autocmd('FileType', {
-      pattern = { 'go', 'typescript', 'cs' },
+      pattern = { 'go', 'typescript', 'cs', 'htmlangular' },
       callback = function()
         vim.treesitter.start()
         -- indentation, provided by nvim-treesitter
