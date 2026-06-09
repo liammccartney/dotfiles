@@ -430,8 +430,24 @@ do
     callback = function(event)
       local buf = event.buf
 
-      -- Find references for the word under your cursor.
-      vim.keymap.set('n', 'gr', builtin.lsp_references, { buffer = buf, desc = '[G]oto [R]eferences' })
+      -- Find references for the word under your cursor, excluding test files.
+      -- Lua patterns, matched against the result's file path.
+      local test_file_patterns = {
+        '%.spec%.ts$', -- Angular specs
+        'Tests?%.cs$', -- C# test classes
+        '[/\\]Tests?[/\\]', -- anything under a Test/Tests directory
+      }
+      vim.keymap.set('n', 'gr', function()
+        builtin.lsp_references { file_ignore_patterns = test_file_patterns }
+      end, { buffer = buf, desc = '[G]oto [R]eferences (no tests)' })
+
+      -- Find references including test files.
+      vim.keymap.set('n', 'grt', builtin.lsp_references, { buffer = buf, desc = '[G]oto [R]eferences with [T]ests' })
+
+      -- Jump to the type of the word under your cursor.
+      -- Useful when you're not sure what type a variable is and you want to see
+      -- the definition of its *type*, not where it was *defined*.
+      vim.keymap.set('n', 'gy', builtin.lsp_type_definitions, { buffer = buf, desc = '[G]oto T[y]pe Definition' })
 
       -- Jump to the implementation of the word under your cursor.
       -- Useful when your language has ways of declaring types without an actual implementation.
@@ -450,10 +466,6 @@ do
       -- Similar to document symbols, except searches over your entire project.
       vim.keymap.set('n', 'gW', builtin.lsp_dynamic_workspace_symbols, { buffer = buf, desc = 'Open Workspace Symbols' })
 
-      -- Jump to the type of the word under your cursor.
-      -- Useful when you're not sure what type a variable is and you want to see
-      -- the definition of its *type*, not where it was *defined*.
-      vim.keymap.set('n', 'grt', builtin.lsp_type_definitions, { buffer = buf, desc = '[G]oto [T]ype Definition' })
     end,
   })
 
