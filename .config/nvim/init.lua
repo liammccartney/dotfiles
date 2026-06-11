@@ -437,12 +437,32 @@ do
         'Tests?%.cs$', -- C# test classes
         '[/\\]Tests?[/\\]', -- anything under a Test/Tests directory
       }
+
+      -- When multiple servers answer textDocument/references (e.g. ts_ls and
+      -- angularls in an Angular project), the merged list contains duplicate
+      -- locations. Dedupe before handing the results to Telescope.
+      local function references_deduped(telescope_opts)
+        vim.lsp.buf.references(nil, {
+          on_list = function(list)
+            local seen = {}
+            local items = vim.tbl_filter(function(item)
+              local key = ('%s:%d:%d'):format(item.filename, item.lnum, item.col)
+              if seen[key] then return false end
+              seen[key] = true
+              return true
+            end, list.items)
+            vim.fn.setqflist({}, ' ', { title = list.title, items = items })
+            builtin.quickfix(telescope_opts)
+          end,
+        })
+      end
+
       vim.keymap.set('n', 'gr', function()
-        builtin.lsp_references { file_ignore_patterns = test_file_patterns }
+        references_deduped { file_ignore_patterns = test_file_patterns }
       end, { buffer = buf, desc = '[G]oto [R]eferences (no tests)' })
 
       -- Find references including test files.
-      vim.keymap.set('n', 'grt', builtin.lsp_references, { buffer = buf, desc = '[G]oto [R]eferences with [T]ests' })
+      vim.keymap.set('n', 'grt', references_deduped, { buffer = buf, desc = '[G]oto [R]eferences with [T]ests' })
 
       -- Jump to the type of the word under your cursor.
       -- Useful when you're not sure what type a variable is and you want to see
