@@ -624,7 +624,7 @@ do
   --  See `:help lsp-config` for information about keys and how to configure
   ---@type table<string, vim.lsp.Config>
   local servers = {
-    -- clangd = {},
+    clangd = {},
     -- gopls = {},
     -- pyright = {},
     -- rust_analyzer = {},
@@ -634,13 +634,14 @@ do
     --
     -- But for many setups, the LSP (`ts_ls`) will work just fine
     ts_ls = {},
-
+    jsonls = {},
     stylua = {}, -- Used to format Lua code
 
     angularls = {},
     csharp_ls = {},
     ty = {},
     ruff = {},
+    ols = {},
     -- Special Lua Config, as recommended by neovim help docs
     lua_ls = {
       on_init = function(client)
