@@ -300,6 +300,10 @@ do
   --  A collection of various small independent plugins/modules
   vim.pack.add { gh 'nvim-mini/mini.nvim' }
 
+  -- [[ markdown rendering ]]
+  -- i don't love this, but it's preferable to reading raw markdown
+  vim.pack.add { gh 'meanderingprogrammer/render-markdown.nvim' }
+
   -- Better Around/Inside textobjects
   --
   -- Examples:
@@ -457,9 +461,12 @@ do
         })
       end
 
-      vim.keymap.set('n', 'gr', function()
-        references_deduped { file_ignore_patterns = test_file_patterns }
-      end, { buffer = buf, desc = '[G]oto [R]eferences (no tests)' })
+      vim.keymap.set(
+        'n',
+        'gr',
+        function() references_deduped { file_ignore_patterns = test_file_patterns } end,
+       { buffer = buf, desc = '[G]oto [R]eferences (no tests)' }
+      )
 
       -- Find references including test files.
       vim.keymap.set('n', 'grt', references_deduped, { buffer = buf, desc = '[G]oto [R]eferences with [T]ests' })
@@ -485,7 +492,6 @@ do
       -- Fuzzy find all the symbols in your current workspace.
       -- Similar to document symbols, except searches over your entire project.
       vim.keymap.set('n', 'gW', builtin.lsp_dynamic_workspace_symbols, { buffer = buf, desc = 'Open Workspace Symbols' })
-
     end,
   })
 
@@ -636,7 +642,7 @@ do
     ts_ls = {},
     jsonls = {},
     stylua = {}, -- Used to format Lua code
-
+    taplo = {},
     angularls = {},
     csharp_ls = {},
     ty = {},
