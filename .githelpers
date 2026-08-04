@@ -109,14 +109,3 @@ cleanup_branches() {
         echo No branches to delete!
     fi
 }
-
-# Pushes the current branch to a new remote and sets upstream
-push_this() {
-  if [ -z "$1" ]
-  then
-    origin=origin
-  else
-    origin="$1"
-  fi
-  git push "$origin" $(git current-branch) --set-upstream
-}

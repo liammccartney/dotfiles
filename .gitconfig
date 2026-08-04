@@ -33,7 +33,6 @@
 # Aliases are command shortcuts
 [alias]
   co = checkout
-  lb = !git reflog show --pretty=format:'%gs ~ %gd' --date=relative | grep 'checkout:' | grep -oE '[^ ]+ ~ .*' | awk -F~ '!seen[$1]++' | head -n 10 | awk -F' ~ HEAD@{' '{printf(\"  \\033[33m%s: \\033[37m %s\\033[0m\\n\", substr($2, 1, length($2)-1), $1)}'
 
   # lg is now a shortcut for a pretty log with short commit messages
   # See the log manpage: https://www.kernel.org/pub/software/scm/git/docs/git-log.html
@@ -49,10 +48,6 @@
 
   # Shorthand for a less noisy status
   s = commit --dry-run --short
-
-  # More sensible names for adding and removing files from the readme
-  stage = add
-  unstage = reset HEAD
 
   # Edit the last commit
   amend= commit --verbose --amend
