@@ -644,7 +644,7 @@ do
     stylua = {}, -- Used to format Lua code
     taplo = {},
     angularls = {},
-    csharp_ls = {},
+    -- csharp_ls = {},
     ty = {},
     ruff = {},
     ols = {},
