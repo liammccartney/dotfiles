@@ -118,6 +118,13 @@ do
 
   vim.keymap.set('n', '<leader>vs', '<cmd>vsplit<cr>')
 
+  vim.keymap.set('n', '<leader>cf', function()
+    local path = vim.fn.expand '%:p'
+    local root = vim.fs.root(0, '.git')
+    vim.fn.setreg('+', root and vim.fs.relpath(root, path) or path)
+  end, { desc = '[C]opy [F]ile path (repo-relative)' })
+  vim.keymap.set('n', '<leader>cn', function() vim.fn.setreg('+', vim.fn.expand '%:t') end, { desc = '[C]opy file [N]ame' })
+
   -- Diagnostic Config & Keymaps
   --  See `:help vim.diagnostic.Opts`
   vim.diagnostic.config {
@@ -346,6 +353,13 @@ do
   ---@diagnostic disable-next-line: duplicate-set-field
   statusline.section_location = function() return '%2l:%-2v' end
 
+  ---@diagnostic disable-next-line: duplicate-set-field
+  statusline.section_filename = function()
+    if vim.bo.buftype == 'terminal' then return '%t' end
+    local path = vim.fn.pathshorten(vim.fn.expand '%:~:.')
+    return path .. '%m%r'
+  end
+
   -- ... and there is more!
   --  Check out: https://github.com/nvim-mini/mini.nvim
 end
@@ -396,6 +410,7 @@ do
     --  All the info you're looking for is in `:help telescope.setup()`
     --
     defaults = {
+      path_display = { 'filename_first' },
       mappings = {
         n = {
           ['<c-d>'] = require('telescope.actions').delete_buffer,
