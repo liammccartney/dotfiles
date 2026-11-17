@@ -89,7 +89,7 @@
 
 [diff]
   colorMoved = default
-  tool = vimdiff
+	tool = omnidiff
 [init]
   defaultBranch = main
 [merge]
@@ -99,3 +99,7 @@
   clean = git-lfs clean -- %f
   smudge = git-lfs smudge -- %f
   process = git-lfs filter-process
+[difftool "omnidiff"]
+	cmd = /opt/homebrew/bin/omnidiff \"$LOCAL\" \"$REMOTE\"
+[difftool]
+	prompt = false
