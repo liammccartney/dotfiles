@@ -88,6 +88,13 @@ do
   -- See `:help 'confirm'`
   vim.o.confirm = true
 
+  -- Indent with 2 spaces by default. Projects with an .editorconfig override
+  -- this per buffer (Neovim's built-in editorconfig support).
+  vim.o.expandtab = true
+  vim.o.shiftwidth = 2
+  vim.o.softtabstop = 2
+  vim.o.tabstop = 2
+
   -- [[ Basic Keymaps ]]
   --  See `:help vim.keymap.set()`
 
@@ -745,6 +752,11 @@ do
       --
       -- You can use 'stop_after_first' to run the first available formatter from the list
       -- javascript = { "prettierd", "prettier", stop_after_first = true },
+      -- conform finds the project's node_modules/.bin/prettier and its .prettierrc
+      javascript = { 'prettierd', 'prettier', stop_after_first = true },
+      javascriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+      typescript = { 'prettierd', 'prettier', stop_after_first = true },
+      typescriptreact = { 'prettierd', 'prettier', stop_after_first = true },
     },
   }
 
