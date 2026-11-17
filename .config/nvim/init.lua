@@ -952,5 +952,15 @@ do
   vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
 end
 
+-- ============================================================
+-- SECTION 10: Treesitter Context
+-- ============================================================
+do
+  vim.pack.add { { src = gh 'nvim-treesitter/nvim-treesitter-context'} }
+  require('treesitter-context').setup()
+  vim.keymap.set('n', '<leader>tt', '<CMD>TSContext toggle<CR>', { desc = 'Toggle Treesitter Context' })
+end
+
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
