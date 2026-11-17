@@ -77,6 +77,9 @@ cleanup_branches() {
         elif (git rev-parse --verify master > /dev/null 2>&1)
         then
             main_branch=master
+        elif (git rev-parse --verify prestable > /dev/null 2>&1)
+        then
+            main_branch=prestable
         elif (git rev-parse --verify main > /dev/null 2>&1)
         then
             main_branch=main
