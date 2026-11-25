@@ -459,9 +459,15 @@ do
       -- Find references for the word under your cursor, excluding test files.
       -- Lua patterns, matched against the result's file path.
       local test_file_patterns = {
-        '%.spec%.ts$', -- Angular specs
+        '%.spec%.ts$', -- Angular and Playwright specs
+        '%.test%.[jt]sx?$', -- Jest/Vitest tests
         'Tests?%.cs$', -- C# test classes
-        '[/\\]Tests?[/\\]', -- anything under a Test/Tests directory
+        '[/\\]test_[^/\\]*%.py$', -- pytest modules
+        '_tests?%.py$',
+        '[/\\]tests%.py$', -- Django's default app tests module
+        '[/\\]conftest%.py$',
+        '[/\\][Tt]ests?[/\\]', -- anything under a test/tests directory
+        '[/\\]__tests__[/\\]',
       }
 
       -- When multiple servers answer textDocument/references (e.g. ts_ls and
