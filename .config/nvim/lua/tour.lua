@@ -6,6 +6,7 @@
 --     "steps": [ { "title": "...", "file": "rel/path", "line": 12, "notes": "markdown",
 --                  "locations": [ { "file": "rel/other", "line": 3, "label": "optional" } ] } ] }
 -- `locations` is optional: a step that spans several files lists the others there, after its `file`.
+-- `base` is optional: without it the tour walks the code as it is, with no diff signs or PR hunks.
 local M = {}
 
 local SIDEBAR_WIDTH = 60
@@ -280,7 +281,10 @@ local function enter_step(step, locs)
   close_step_tabs()
   if #locs == 0 then return end
   M.show(locs[1].file, locs[1].line)
-  if #locs == 1 then return M.file_hunks() end
+  if #locs == 1 then
+    if state.tour.base then M.file_hunks() end
+    return
+  end
   step_hunks(step, locs)
   state.loc_tabs[1] = state.main_tab
   for k = 2, #locs do
@@ -362,6 +366,7 @@ end
 --- Side-by-side diff of the current file against the tour's base; call again to close it.
 function M.toggle_diff()
   if not has_tour() then return end
+  if not state.tour.base then return vim.notify('This tour has no base to diff against', vim.log.levels.WARN) end
   for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
     if vim.api.nvim_buf_get_name(vim.api.nvim_win_get_buf(win)):match '^gitsigns://' then
       vim.api.nvim_win_close(win, true)
@@ -377,10 +382,23 @@ end
 
 --- Highlight changed lines and words in place, without opening a split.
 function M.toggle_inline()
+  if has_tour() and not state.tour.base then
+    return vim.notify('This tour has no base to diff against', vim.log.levels.WARN)
+  end
   state.inline_on = not state.inline_on
   local gitsigns = require 'gitsigns'
   gitsigns.toggle_linehl(state.inline_on)
   gitsigns.toggle_word_diff(state.inline_on)
+end
+
+--- Point gitsigns at the tour's base and list its hunks. A tour without a base walks the code as it is: gitsigns
+--- goes back to its default (the index, so only edits made during the tour show) and the PR hunks are cleared.
+local function apply_base()
+  require('gitsigns').change_base(state.tour.base, true)
+  state.applied_base = state.tour.base
+  if state.tour.base then return M.load_hunks() end
+  vim.fn.setqflist({}, 'f')
+  vim.cmd 'cclose'
 end
 
 function M.start(path)
@@ -394,10 +412,7 @@ function M.start(path)
     callback = sync_loc_with_tab,
   })
   if state.tour.root then vim.cmd.cd(vim.fn.fnameescape(state.tour.root)) end
-  if state.tour.base then
-    require('gitsigns').change_base(state.tour.base, true)
-    M.load_hunks()
-  end
+  apply_base()
   -- Shadows the default tag-stack ]t/[t, but only once a tour is running.
   vim.keymap.set('n', ']t', M.next, { desc = 'Next tour step' })
   vim.keymap.set('n', '[t', M.prev, { desc = 'Previous tour step' })
@@ -411,6 +426,7 @@ end
 function M.reload()
   if not state.path then return end
   state.tour = read_tour(state.path)
+  if state.tour.base ~= state.applied_base then apply_base() end
   state.current = math.min(state.current, math.max(#state.tour.steps, 1))
   local step = state.tour.steps[state.current]
   state.loc = math.min(state.loc, math.max(step and #step_locations(step) or 1, 1))
