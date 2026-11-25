@@ -91,24 +91,23 @@ cleanup_branches() {
         main_branch="$1"
     fi
 
-    git checkout "$main_branch"
-
-    if [[ "$?" != 0 ]] ;
-    then
-        exit $?
-    fi
+    git checkout "$main_branch" || exit 1
 
     git fetch --all
     git merge
     git remote prune origin
-    branches_to_delete=$(git branch -vv --merged | grep gone | awk '{print $1}')
 
-    if [[ -n "$branches_to_delete" ]];
-    then
-        while read -r branch; do
-            git branch -d "$branch"
-        done <<< "$branches_to_delete"
-    else
-        echo No branches to delete!
-    fi
+    deleted=0
+    for branch in $(git for-each-ref --format='%(refname:short) %(upstream:track)' refs/heads | awk '$2 == "[gone]" {print $1}'); do
+        base=$(git merge-base "$main_branch" "$branch") || continue
+        squashed=$(git commit-tree "$branch^{tree}" -p "$base" -m squash)
+        if git merge-base --is-ancestor "$branch" "$main_branch" ||
+            [[ $(git cherry "$main_branch" "$squashed") == -* ]]; then
+            git branch -D "$branch" && deleted=$((deleted + 1))
+        else
+            echo "Kept $branch: upstream is gone but its changes aren't in $main_branch"
+        fi
+    done
+
+    [[ $deleted == 0 ]] && echo No branches to delete!
 }
